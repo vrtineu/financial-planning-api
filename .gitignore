@@ -1,0 +1,8 @@
+#ide files
+.vscode
+
+#node_modules
+node_modules
+
+#confidential files
+.env

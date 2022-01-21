@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Receitas from "../models/Receitas";
 import { connect } from "../database";
-import { responseStatusCode } from "../utils/responseStatusCode";
+import { resDefaultMessage, resError } from "../utils/responseStatusCode";
 
 export default class ReceitasController {
   constructor() {
@@ -26,14 +26,13 @@ export default class ReceitasController {
         ],
       });
 
-      if (findReceita.length)
-        return responseStatusCode(res, 400, "Receita já cadastrada");
+      if (findReceita.length) return resDefaultMessage(res, 400, "registered");
 
       await receita.save();
 
-      return responseStatusCode(res, 201, "Receita cadastrada com sucesso");
+      return resDefaultMessage(res, 201, "sucess");
     } catch (error) {
-      return responseStatusCode(res, 400, { error });
+      return resError(res, { error });
     }
   }
 
@@ -41,12 +40,11 @@ export default class ReceitasController {
     try {
       const receitas = await Receitas.find().select("-__v -_id -idReceita");
 
-      if (!receitas)
-        return responseStatusCode(res, 404, "Nenhuma receita encontrada");
+      if (!receitas) return resDefaultMessage(res, 404, "notFound");
 
-      return responseStatusCode(res, 200, receitas);
+      return res.status(200).json(receitas);
     } catch (error) {
-      return responseStatusCode(res, 400, { error });
+      return resError(res, { error });
     }
   }
 
@@ -57,12 +55,11 @@ export default class ReceitasController {
         "-__v -_id -idReceita"
       );
 
-      if (!receita)
-        return responseStatusCode(res, 404, "Receita não encontrada");
+      if (!receita) return resDefaultMessage(res, 404, "notFound");
 
-      return responseStatusCode(res, 200, receita);
+      return res.status(200).json(receita);
     } catch (error) {
-      return responseStatusCode(res, 400, { error });
+      return resError(res, { error });
     }
   }
 
@@ -80,16 +77,16 @@ export default class ReceitasController {
         ],
       });
 
-      if (receita) return responseStatusCode(res, 400, "Receita já cadastrada");
+      if (receita) return resDefaultMessage(res, 400, "registered");
 
       await Receitas.findOneAndUpdate(
         { idReceita: id },
         { descricao, valor, data }
       );
 
-      return responseStatusCode(res, 200, "Receita atualizada com sucesso");
+      return resDefaultMessage(res, 200, "updated");
     } catch (error) {
-      return responseStatusCode(res, 400, { error });
+      return resError(res, { error });
     }
   }
 
@@ -100,11 +97,11 @@ export default class ReceitasController {
       const receita = await Receitas.findOneAndDelete({ idReceita: id });
 
       if (!receita)
-        return responseStatusCode(res, 404, "Receita não encontrada");
+        return resDefaultMessage(res, 404, "notFound");
 
-      return responseStatusCode(res, 200, "Receita deletada com sucesso");
+      return resDefaultMessage(res, 200, "deleted");
     } catch (error) {
-      return responseStatusCode(res, 400, { error });
+      return resError(res, { error });
     }
   }
 }

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Despesas from "../models/Despesas";
 import { connect } from "../database";
-import { responseStatusCode } from "../utils/responseStatusCode";
+import { resDefaultMessage, resError } from "../utils/responseStatusCode";
 
 export default class DespesasController {
   constructor() {
@@ -26,14 +26,13 @@ export default class DespesasController {
         ],
       });
 
-      if (findDespesa.length)
-        return responseStatusCode(res, 400, "Despesa já cadastrada");
+      if (findDespesa.length) return resDefaultMessage(res, 400, "registered");
 
       await despesa.save();
 
-      return responseStatusCode(res, 201, "Despesa cadastrada com sucesso");
+      return resDefaultMessage(res, 201, "sucess");
     } catch (error) {
-      return responseStatusCode(res, 400, { error });
+      return resError(res, { error });
     }
   }
 
@@ -41,12 +40,11 @@ export default class DespesasController {
     try {
       const despesas = await Despesas.find().select("-__v -_id -idDespesa");
 
-      if (!despesas)
-        return responseStatusCode(res, 404, "Nenhuma despesa encontrada");
+      if (!despesas) return resDefaultMessage(res, 404, "notFound");
 
-      return responseStatusCode(res, 200, despesas);
+      return res.status(200).json(despesas);
     } catch (error) {
-      return responseStatusCode(res, 400, { error });
+      return resError(res, { error });
     }
   }
 
@@ -57,12 +55,11 @@ export default class DespesasController {
         "-__v -_id -idDespesa"
       );
 
-      if (!despesa)
-        return responseStatusCode(res, 404, "Nenhuma despesa encontrada");
+      if (!despesa) return resDefaultMessage(res, 404, "notFound");
 
-      return responseStatusCode(res, 200, despesa);
+      return res.status(200).json(despesa);
     } catch (error) {
-      return responseStatusCode(res, 400, { error });
+      return resError(res, { error });
     }
   }
 
@@ -80,16 +77,16 @@ export default class DespesasController {
         ],
       });
 
-      if (despesa) return responseStatusCode(res, 400, "Despesa já cadastrada");
+      if (despesa) return resDefaultMessage(res, 400, "registered");
 
       await Despesas.findOneAndUpdate(
         { idDespesa: id },
         { descricao, valor, data }
       );
 
-      return responseStatusCode(res, 200, "Despesa atualizada com sucesso");
+      return resDefaultMessage(res, 200, "updated");
     } catch (error) {
-      return responseStatusCode(res, 400, { error });
+      return resError(res, { error });
     }
   }
 
@@ -99,12 +96,11 @@ export default class DespesasController {
 
       const despesa = await Despesas.findOneAndDelete({ idDespesa: id });
 
-      if (!despesa)
-        return responseStatusCode(res, 404, "Nenhuma despesa encontrada");
+      if (!despesa) return resDefaultMessage(res, 404, "notFound");
 
-      return responseStatusCode(res, 200, "Despesa deletada com sucesso");
+      return resDefaultMessage(res, 200, "deleted");
     } catch (error) {
-      return responseStatusCode(res, 400, { error });
+      return resError(res, { error });
     }
   }
 }

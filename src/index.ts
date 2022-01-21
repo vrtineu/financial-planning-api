@@ -1,19 +1,18 @@
-import express, { Application } from 'express';
 import dotenv from "dotenv";
-import connect from "./database/index";
+import express, { Application } from "express";
+import routes from "./routes";
 
 dotenv.config();
-const { MONGO_URI, PORT } = process.env;
+const port = process.env.PORT;
 
 const app: Application = express();
-connect(typeof MONGO_URI === "string" ? MONGO_URI : process.exit(1));
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use("/api", routes);
 
-app.listen(PORT, () => {
-  console.log(`App listening at http://localhost:${PORT}`);
+app.listen(port, () => {
+  console.log(`App listening at http://localhost:${port}`);
 });
 
 export default app;

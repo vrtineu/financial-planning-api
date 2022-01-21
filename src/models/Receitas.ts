@@ -1,5 +1,6 @@
-import { Document, Model, model, Schema } from "mongoose";
-import autoIncrement from "mongoose-sequence";
+import mongoose, { Document, Model, model, Schema } from "mongoose";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const autoIncrement = require("mongoose-sequence")(mongoose);
 
 const receitasSchema: Schema = new Schema({
   id: {
@@ -22,5 +23,5 @@ const receitasSchema: Schema = new Schema({
 
 receitasSchema.plugin(autoIncrement, { inc_field: "id" });
 
-const Receitas: Model<Document> = model("Receitas", receitasSchema);
+const Receitas: Model<Document> = model("Receitas", receitasSchema, "receitas");
 export default Receitas;

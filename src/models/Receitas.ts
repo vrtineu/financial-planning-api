@@ -1,8 +1,15 @@
-import mongoose, { Document, Model, model, Schema } from "mongoose";
+import mongoose, { Model, model, Schema } from "mongoose";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const autoIncrement = require("mongoose-sequence")(mongoose);
 
-const receitasSchema: Schema = new Schema({
+interface Receita {
+  idReceita: number;
+  descricao: string;
+  valor: number;
+  data: Date;
+}
+
+const schema: Schema = new Schema<Receita>({
   idReceita: {
     type: Number,
     unique: true,
@@ -21,7 +28,7 @@ const receitasSchema: Schema = new Schema({
   },
 });
 
-receitasSchema.plugin(autoIncrement, { inc_field: "idReceita" });
+schema.plugin(autoIncrement, { inc_field: "idReceita" });
 
-const Receitas: Model<Document> = model("Receitas", receitasSchema, "receitas");
+const Receitas: Model<Receita> = model("Receitas", schema, "receitas");
 export default Receitas;

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Receitas from "../models/Receitas";
 import connect from "../database";
+import { responseStatusCode } from "../utils/responseStatusCode";
 
 export default class ReceitasController {
   constructor() {
@@ -26,15 +27,13 @@ export default class ReceitasController {
       });
 
       if (findReceita.length)
-        return res.status(400).json({ message: "Receita já cadastrada" });
+        return responseStatusCode(res, 400, "Receita já cadastrada");
 
       await receita.save();
 
-      return res
-        .status(201)
-        .json({ message: "Receita cadastrada com sucesso" });
+      return responseStatusCode(res, 201, "Receita cadastrada com sucesso");
     } catch (error) {
-      return res.status(400).json({ error });
+      return responseStatusCode(res, 400, { error });
     }
   }
 
@@ -43,11 +42,11 @@ export default class ReceitasController {
       const receitas = await Receitas.find().select("-__v -_id -id");
 
       if (!receitas)
-        return res.status(404).json({ message: "Nenhuma receita cadastrada" });
+        return responseStatusCode(res, 404, "Nenhuma receita encontrada");
 
-      return res.status(200).json(receitas);
+      return responseStatusCode(res, 200, receitas);
     } catch (error) {
-      return res.status(400).json({ error });
+      return responseStatusCode(res, 400, { error });
     }
   }
 
@@ -59,11 +58,11 @@ export default class ReceitasController {
       );
 
       if (!receita)
-        return res.status(404).json({ message: "Receita não encontrada" });
+        return responseStatusCode(res, 404, "Receita não encontrada");
 
-      return res.status(200).json(receita);
+      return responseStatusCode(res, 200, receita);
     } catch (error) {
-      return res.status(400).json({ error });
+      return responseStatusCode(res, 400, { error });
     }
   }
 
@@ -81,19 +80,16 @@ export default class ReceitasController {
         ],
       });
 
-      if (receita)
-        return res.status(400).json({ message: "Receita já cadastrada" });
+      if (receita) return responseStatusCode(res, 400, "Receita já cadastrada");
 
       await Receitas.findOneAndUpdate(
         { id: idReceita },
         { descricao, valor, data }
       );
 
-      return res
-        .status(200)
-        .json({ message: "Receita atualizada com sucesso" });
+      return responseStatusCode(res, 200, "Receita atualizada com sucesso");
     } catch (error) {
-      return res.status(400).json({ error });
+      return responseStatusCode(res, 400, { error });
     }
   }
 
@@ -104,11 +100,11 @@ export default class ReceitasController {
       const receita = await Receitas.findOneAndDelete({ id: idReceita });
 
       if (!receita)
-        return res.status(404).json({ message: "Receita não encontrada" });
+        return responseStatusCode(res, 404, "Receita não encontrada");
 
-      return res.status(200).json({ message: "Receita deletada com sucesso" });
+      return responseStatusCode(res, 200, "Receita deletada com sucesso");
     } catch (error) {
-      return res.status(400).json({ error });
+      return responseStatusCode(res, 400, { error });
     }
   }
 }

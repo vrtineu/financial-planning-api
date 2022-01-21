@@ -13,6 +13,7 @@
   "dependencies": {
     "dotenv": "^14.2.0",
     "express": "^4.17.2",
+    "glob": "^7.2.0",
     "mongodb": "^4.3.1",
     "mongoose": "^6.1.7",
     "mongoose-sequence": "^5.3.1"

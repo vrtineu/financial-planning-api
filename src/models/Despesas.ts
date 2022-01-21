@@ -21,7 +21,7 @@ const despesasSchema: Schema = new Schema({
   },
 });
 
-despesasSchema.plugin(autoIncrement, { inc_field: "idDespesa" });
+despesasSchema.plugin(autoIncrement, { inc_field: "id" });
 
 const Despesas: Model<Document> = model("Despesas", despesasSchema);
 export default Despesas;

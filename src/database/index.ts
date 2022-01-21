@@ -3,8 +3,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export default () => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const db = process.env.MONGO_URI!;
+  const db = process.env.MONGO_URI;
+  if (!db) throw new Error("Configurar .env");
+  
   const options = { useNewUrlParser: true, useUnifiedTopology: true };
   const connect = () => {
     mongoose.connect(db, options as ConnectOptions).catch((err) => {

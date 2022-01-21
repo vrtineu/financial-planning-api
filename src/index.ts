@@ -4,6 +4,7 @@ import routes from "./routes";
 
 dotenv.config();
 const port = process.env.PORT;
+if (!port) throw new Error("Configurar .env");
 
 const app: Application = express();
 

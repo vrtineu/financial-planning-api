@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Despesas from "../models/Despesas";
 import connect from "../database";
+import { responseStatusCode } from "../utils/responseStatusCode";
 
 export default class DespesasController {
   constructor() {
@@ -26,15 +27,13 @@ export default class DespesasController {
       });
 
       if (findDespesa.length)
-        return res.status(400).json({ message: "Despesa já cadastrada" });
+        return responseStatusCode(res, 400, "Despesa já cadastrada");
 
       await despesa.save();
-      
-      return res
-        .status(201)
-        .json({ message: "Despesa cadastrada com sucesso" });
+
+      return responseStatusCode(res, 201, "Despesa cadastrada com sucesso");
     } catch (error) {
-      return res.status(400).json({ error });
+      return responseStatusCode(res, 400, { error });
     }
   }
 }

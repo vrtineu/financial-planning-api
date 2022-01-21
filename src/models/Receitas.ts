@@ -21,7 +21,7 @@ const receitasSchema: Schema = new Schema({
   },
 });
 
-receitasSchema.plugin(autoIncrement, { inc_field: "id" });
+receitasSchema.plugin(autoIncrement, { inc_field: "idReceita" });
 
 const Receitas: Model<Document> = model("Receitas", receitasSchema, "receitas");
 export default Receitas;

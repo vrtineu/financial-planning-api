@@ -3,7 +3,7 @@ import mongoose, { Document, Model, model, Schema } from "mongoose";
 const autoIncrement = require("mongoose-sequence")(mongoose);
 
 const receitasSchema: Schema = new Schema({
-  id: {
+  idReceita: {
     type: Number,
     unique: true,
   },

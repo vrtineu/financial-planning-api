@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Receitas from "../models/Receitas";
-import connect from "../database";
+import { connect } from "../database";
 import { responseStatusCode } from "../utils/responseStatusCode";
 
 export default class ReceitasController {
@@ -39,7 +39,7 @@ export default class ReceitasController {
 
   async getReceitas(req: Request, res: Response) {
     try {
-      const receitas = await Receitas.find().select("-__v -_id -id");
+      const receitas = await Receitas.find().select("-__v -_id -idReceita");
 
       if (!receitas)
         return responseStatusCode(res, 404, "Nenhuma receita encontrada");
@@ -52,9 +52,9 @@ export default class ReceitasController {
 
   async getReceita(req: Request, res: Response) {
     try {
-      const idReceita = req.params.id;
-      const receita = await Receitas.findOne({ id: idReceita }).select(
-        "-__v -_id -id"
+      const id = Number(req.params.id);
+      const receita = await Receitas.findOne({ idReceita: id }).select(
+        "-__v -_id -idReceita"
       );
 
       if (!receita)
@@ -68,13 +68,13 @@ export default class ReceitasController {
 
   async updateReceita(req: Request, res: Response) {
     try {
-      const idReceita = req.params.id;
+      const id = Number(req.params.id);
       const { descricao, valor, data } = req.body;
 
       const monthOfReceita = new Date(data).getMonth() + 1;
       const receita = await Receitas.findOne({
         $and: [
-          { id: { $ne: idReceita } },
+          { idReceita: { $ne: id } },
           { descricao },
           { $expr: { $eq: [{ $month: "$data" }, monthOfReceita] } },
         ],
@@ -83,7 +83,7 @@ export default class ReceitasController {
       if (receita) return responseStatusCode(res, 400, "Receita já cadastrada");
 
       await Receitas.findOneAndUpdate(
-        { id: idReceita },
+        { idReceita: id },
         { descricao, valor, data }
       );
 
@@ -95,9 +95,9 @@ export default class ReceitasController {
 
   async deleteReceita(req: Request, res: Response) {
     try {
-      const idReceita = req.params.id;
+      const id = Number(req.params.id);
 
-      const receita = await Receitas.findOneAndDelete({ id: idReceita });
+      const receita = await Receitas.findOneAndDelete({ idReceita: id });
 
       if (!receita)
         return responseStatusCode(res, 404, "Receita não encontrada");

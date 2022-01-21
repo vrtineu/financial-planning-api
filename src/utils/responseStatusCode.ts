@@ -14,9 +14,7 @@ function responseStatusCode(
   if (!message) message = "";
 
   if (statusCode >= 400) {
-    return res.status(statusCode).json({
-      error: message,
-    });
+    return res.status(statusCode).json({ message });
   }
   return res.status(statusCode).json(message);
 }

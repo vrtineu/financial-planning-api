@@ -3,7 +3,7 @@ import mongoose, { Document, Model, model, Schema } from "mongoose";
 const autoIncrement = require("mongoose-sequence")(mongoose);
 
 const despesasSchema: Schema = new Schema({
-  id: {
+  idDespesa: {
     type: Number,
     unique: true,
   },
@@ -21,7 +21,7 @@ const despesasSchema: Schema = new Schema({
   },
 });
 
-despesasSchema.plugin(autoIncrement, { inc_field: "id" });
+despesasSchema.plugin(autoIncrement, { inc_field: "idDespesa" });
 
-const Despesas: Model<Document> = model("Despesas", despesasSchema);
+const Despesas: Model<Document> = model("Despesas", despesasSchema, "despesas");
 export default Despesas;

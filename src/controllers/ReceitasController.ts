@@ -12,7 +12,7 @@ export default class ReceitasController {
     try {
       const { descricao, valor, data } = req.body;
 
-      const monthOfReceita = new Date(data).getMonth() + 1;
+      const monthOfReceita = new Date(data).getUTCMonth() + 1;
       const receita = new Receitas({
         descricao,
         valor,
@@ -30,7 +30,7 @@ export default class ReceitasController {
 
       await receita.save();
 
-      return resDefaultMessage(res, 201, "sucess");
+      return resDefaultMessage(res, 201, "success");
     } catch (error) {
       return resError(res, { error });
     }
@@ -96,8 +96,7 @@ export default class ReceitasController {
 
       const receita = await Receitas.findOneAndDelete({ idReceita: id });
 
-      if (!receita)
-        return resDefaultMessage(res, 404, "notFound");
+      if (!receita) return resDefaultMessage(res, 404, "notFound");
 
       return resDefaultMessage(res, 200, "deleted");
     } catch (error) {

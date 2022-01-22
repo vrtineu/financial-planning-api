@@ -12,7 +12,7 @@ export default class DespesasController {
     try {
       const { descricao, valor, data } = req.body;
 
-      const monthOfDespesa = new Date(data).getMonth() + 1;
+      const monthOfDespesa = new Date(data).getUTCMonth() + 1;
       const despesa = new Despesas({
         descricao,
         valor,
@@ -30,7 +30,7 @@ export default class DespesasController {
 
       await despesa.save();
 
-      return resDefaultMessage(res, 201, "sucess");
+      return resDefaultMessage(res, 201, "success");
     } catch (error) {
       return resError(res, { error });
     }

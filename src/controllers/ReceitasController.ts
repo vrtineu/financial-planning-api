@@ -2,7 +2,10 @@ import { Request, Response } from "express";
 import Receitas from "../models/Receitas";
 import { connect } from "../database";
 import { resDefaultMessage, resError } from "../utils/responseStatusCode";
-import { isFromSameMonth } from "../services";
+import {
+  isFromSameMonthToCreate,
+  isFromSameMonthToUpdateReceita,
+} from "../services";
 
 export default class ReceitasController {
   constructor() {
@@ -18,7 +21,7 @@ export default class ReceitasController {
         data,
       });
 
-      const receitaAlreadyExists = await isFromSameMonth(req, Receitas);
+      const receitaAlreadyExists = await isFromSameMonthToCreate(req, Receitas);
 
       if (receitaAlreadyExists)
         return resDefaultMessage(res, 400, "registered");
@@ -39,7 +42,7 @@ export default class ReceitasController {
 
       return res.status(200).json(receitas);
     } catch (error) {
-      return resError(res, { error });
+      return resError(res, error);
     }
   }
 
@@ -54,7 +57,7 @@ export default class ReceitasController {
 
       return res.status(200).json(receita);
     } catch (error) {
-      return resError(res, { error });
+      return resError(res, error);
     }
   }
 
@@ -63,14 +66,7 @@ export default class ReceitasController {
       const id = Number(req.params.id);
       const { descricao, valor, data } = req.body;
 
-      const monthOfReceita = new Date(data).getMonth() + 1;
-      const receita = await Receitas.findOne({
-        $and: [
-          { idReceita: { $ne: id } },
-          { descricao },
-          { $expr: { $eq: [{ $month: "$data" }, monthOfReceita] } },
-        ],
-      });
+      const receita = await isFromSameMonthToUpdateReceita(req, Receitas);
 
       if (receita) return resDefaultMessage(res, 400, "registered");
 
@@ -81,7 +77,7 @@ export default class ReceitasController {
 
       return resDefaultMessage(res, 200, "updated");
     } catch (error) {
-      return resError(res, { error });
+      return resError(res, error);
     }
   }
 
@@ -95,7 +91,7 @@ export default class ReceitasController {
 
       return resDefaultMessage(res, 200, "deleted");
     } catch (error) {
-      return resError(res, { error });
+      return resError(res, error);
     }
   }
 }

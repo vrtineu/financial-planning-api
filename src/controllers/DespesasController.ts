@@ -2,7 +2,10 @@ import { Request, Response } from "express";
 import Despesas from "../models/Despesas";
 import { connect } from "../database";
 import { resDefaultMessage, resError } from "../utils/responseStatusCode";
-import { isFromSameMonth } from "../services";
+import {
+  isFromSameMonthToCreate,
+  isFromSameMonthToUpdateDespesa,
+} from "../services";
 
 export default class DespesasController {
   constructor() {
@@ -18,7 +21,7 @@ export default class DespesasController {
         data,
       });
 
-      const despesaAlreadyExists = await isFromSameMonth(req, Despesas);
+      const despesaAlreadyExists = await isFromSameMonthToCreate(req, Despesas);
 
       if (despesaAlreadyExists)
         return resDefaultMessage(res, 400, "registered");
@@ -27,7 +30,7 @@ export default class DespesasController {
 
       return resDefaultMessage(res, 201, "success");
     } catch (error) {
-      return resError(res, { error });
+      return resError(res, error);
     }
   }
 
@@ -39,7 +42,7 @@ export default class DespesasController {
 
       return res.status(200).json(despesas);
     } catch (error) {
-      return resError(res, { error });
+      return resError(res, error);
     }
   }
 
@@ -54,7 +57,7 @@ export default class DespesasController {
 
       return res.status(200).json(despesa);
     } catch (error) {
-      return resError(res, { error });
+      return resError(res, error);
     }
   }
 
@@ -63,14 +66,7 @@ export default class DespesasController {
       const id = Number(req.params.id);
       const { descricao, valor, data } = req.body;
 
-      const monthOfDespesa = new Date(data).getMonth() + 1;
-      const despesa = await Despesas.findOne({
-        $and: [
-          { idDespesa: { $ne: id } },
-          { descricao },
-          { $expr: { $eq: [{ $month: "$data" }, monthOfDespesa] } },
-        ],
-      });
+      const despesa = await isFromSameMonthToUpdateDespesa(req, Despesas);
 
       if (despesa) return resDefaultMessage(res, 400, "registered");
 
@@ -81,7 +77,7 @@ export default class DespesasController {
 
       return resDefaultMessage(res, 200, "updated");
     } catch (error) {
-      return resError(res, { error });
+      return resError(res, error);
     }
   }
 
@@ -95,7 +91,7 @@ export default class DespesasController {
 
       return resDefaultMessage(res, 200, "deleted");
     } catch (error) {
-      return resError(res, { error });
+      return resError(res, error);
     }
   }
 }

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Despesas from "../models/Despesas";
 import { connect } from "../database";
 import { resDefaultMessage, resError } from "../utils/responseStatusCode";
+import { isFromSameMonth } from "../services";
 
 export default class DespesasController {
   constructor() {
@@ -11,22 +12,16 @@ export default class DespesasController {
   async createDespesa(req: Request, res: Response) {
     try {
       const { descricao, valor, data } = req.body;
-
-      const monthOfDespesa = new Date(data).getUTCMonth() + 1;
       const despesa = new Despesas({
         descricao,
         valor,
         data,
       });
 
-      const findDespesa = await Despesas.find({
-        $and: [
-          { descricao },
-          { $expr: { $eq: [{ $month: "$data" }, monthOfDespesa] } },
-        ],
-      });
+      const despesaAlreadyExists = await isFromSameMonth(req, Despesas);
 
-      if (findDespesa.length) return resDefaultMessage(res, 400, "registered");
+      if (despesaAlreadyExists)
+        return resDefaultMessage(res, 400, "registered");
 
       await despesa.save();
 

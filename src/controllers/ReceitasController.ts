@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Receitas from "../models/Receitas";
 import { connect } from "../database";
 import { resDefaultMessage, resError } from "../utils/responseStatusCode";
+import { isFromSameMonth } from "../services";
 
 export default class ReceitasController {
   constructor() {
@@ -11,28 +12,22 @@ export default class ReceitasController {
   async createReceita(req: Request, res: Response) {
     try {
       const { descricao, valor, data } = req.body;
-
-      const monthOfReceita = new Date(data).getUTCMonth() + 1;
       const receita = new Receitas({
         descricao,
         valor,
         data,
       });
 
-      const findReceita = await Receitas.find({
-        $and: [
-          { descricao },
-          { $expr: { $eq: [{ $month: "$data" }, monthOfReceita] } },
-        ],
-      });
+      const receitaAlreadyExists = await isFromSameMonth(req, Receitas);
 
-      if (findReceita.length) return resDefaultMessage(res, 400, "registered");
+      if (receitaAlreadyExists)
+        return resDefaultMessage(res, 400, "registered");
 
       await receita.save();
 
       return resDefaultMessage(res, 201, "success");
     } catch (error) {
-      return resError(res, { error });
+      return resError(res, error);
     }
   }
 

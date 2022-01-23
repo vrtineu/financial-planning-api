@@ -30,8 +30,8 @@ function resDefaultMessage(res: Response, statusCode: number, message: string) {
  * @param error response error object
  * @returns response object with status code and error message
  */
-function resError(res: Response, error: object) {
-  return res.status(400).json(error);
+function resError(res: Response, error: string | object | unknown) {
+  return res.status(400).json({ error: error });
 }
 
 export { resDefaultMessage, resError };

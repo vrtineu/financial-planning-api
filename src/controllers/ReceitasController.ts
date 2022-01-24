@@ -2,10 +2,7 @@ import { Request, Response } from "express";
 import Receitas from "../models/Receitas";
 import { connect } from "../database";
 import { resDefaultMessage, resError } from "../utils/responseStatusCode";
-import {
-  isFromSameMonthToCreate,
-  isFromSameMonthToUpdateReceita,
-} from "../services";
+import { isFromSameMonth } from "../services";
 
 export default class ReceitasController {
   constructor() {
@@ -21,7 +18,7 @@ export default class ReceitasController {
         data,
       });
 
-      const receitaAlreadyExists = await isFromSameMonthToCreate(req, Receitas);
+      const receitaAlreadyExists = await isFromSameMonth(req, Receitas);
 
       if (receitaAlreadyExists)
         return resDefaultMessage(res, 400, "registered");
@@ -66,7 +63,7 @@ export default class ReceitasController {
       const id = Number(req.params.id);
       const { descricao, valor, data } = req.body;
 
-      const receita = await isFromSameMonthToUpdateReceita(req, Receitas);
+      const receita = await isFromSameMonth(req, Receitas);
 
       if (receita) return resDefaultMessage(res, 400, "registered");
 

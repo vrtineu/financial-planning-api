@@ -2,10 +2,7 @@ import { Request, Response } from "express";
 import Despesas from "../models/Despesas";
 import { connect } from "../database";
 import { resDefaultMessage, resError } from "../utils/responseStatusCode";
-import {
-  isFromSameMonthToCreate,
-  isFromSameMonthToUpdateDespesa,
-} from "../services";
+import { isFromSameMonth } from "../services";
 
 export default class DespesasController {
   constructor() {
@@ -21,7 +18,7 @@ export default class DespesasController {
         data,
       });
 
-      const despesaAlreadyExists = await isFromSameMonthToCreate(req, Despesas);
+      const despesaAlreadyExists = await isFromSameMonth(req, Despesas);
 
       if (despesaAlreadyExists)
         return resDefaultMessage(res, 400, "registered");
@@ -66,7 +63,7 @@ export default class DespesasController {
       const id = Number(req.params.id);
       const { descricao, valor, data } = req.body;
 
-      const despesa = await isFromSameMonthToUpdateDespesa(req, Despesas);
+      const despesa = await isFromSameMonth(req, Despesas);
 
       if (despesa) return resDefaultMessage(res, 400, "registered");
 

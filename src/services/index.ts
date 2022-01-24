@@ -1,59 +1,26 @@
 import { Request } from "express";
-import { Model } from "mongoose";
+import { FilterQuery, Model } from "mongoose";
 import { Receita } from "../models/Receitas";
 import { Despesa } from "../models/Despesas";
 
-export async function isFromSameMonthToCreate(
+export async function isFromSameMonth(
   req: Request,
   model: Model<Receita> | Model<Despesa>
 ) {
+  const id = req.params?.id;
   const { descricao, data } = req.body;
+
   const monthOfRequest = new Date(data).getUTCMonth() + 1;
+  const filter: FilterQuery<Receita | Despesa> = {
+    descricao,
+    $expr: { $eq: [{ $month: "$data" }, monthOfRequest] },
+  };
 
-  const findRequest = await (model as Model<Receita | Despesa>).find({
-    $and: [
-      { descricao },
-      { $expr: { $eq: [{ $month: "$data" }, monthOfRequest] } },
-    ],
-  });
+  const idType = Object.keys(model.schema.paths)[0];
 
-  return findRequest.length;
-}
+  if (id) filter[idType] = { $ne: id };
 
-export async function isFromSameMonthToUpdateReceita(
-  req: Request,
-  model: Model<Receita>
-) {
-  const { descricao, data } = req.body;
-  const id = Number(req.params.id);
-  const monthOfRequest = new Date(data).getUTCMonth() + 1;
-
-  const findRequest = await (model as Model<Receita>).find({
-    $and: [
-      { descricao },
-      { $expr: { $eq: [{ $month: "$data" }, monthOfRequest] } },
-      { idReceita: { $ne: id } },
-    ],
-  });
-
-  return findRequest.length;
-}
-
-export async function isFromSameMonthToUpdateDespesa(
-  req: Request,
-  model: Model<Despesa>
-) {
-  const { descricao, data } = req.body;
-  const id = Number(req.params.id);
-  const monthOfRequest = new Date(data).getUTCMonth() + 1;
-
-  const findRequest = await (model as Model<Despesa>).find({
-    $and: [
-      { descricao },
-      { $expr: { $eq: [{ $month: "$data" }, monthOfRequest] } },
-      { idDespesa: { $ne: id } },
-    ],
-  });
+  const findRequest = await (model as Model<Receita | Despesa>).find(filter);
 
   return findRequest.length;
 }

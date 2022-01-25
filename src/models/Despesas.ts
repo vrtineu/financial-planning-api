@@ -4,6 +4,7 @@ const autoIncrement = require("mongoose-sequence")(mongoose);
 
 export interface Despesa {
   idDespesa: number;
+  categoria: string;
   descricao: string;
   valor: number;
   data: Date;
@@ -13,6 +14,20 @@ const schema: Schema = new Schema<Despesa>({
   idDespesa: {
     type: Number,
     unique: true,
+  },
+  categoria: {
+    type: String,
+    enum: [
+      "Alimentação",
+      "Saúde",
+      "Moradia",
+      "Transporte",
+      "Educação",
+      "Lazer",
+      "Imprevistos",
+      "Outros",
+    ],
+    default: "Outros",
   },
   descricao: {
     type: String,

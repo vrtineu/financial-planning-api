@@ -11,11 +11,13 @@ export default class DespesasController {
 
   async createDespesa(req: Request, res: Response) {
     try {
-      const { descricao, valor, data } = req.body;
+      const { descricao, valor, data, categoria } = req.body;
+
       const despesa = new Despesas({
         descricao,
         valor,
         data,
+        categoria,
       });
 
       const despesaAlreadyExists = await isFromSameMonth(req, Despesas);
@@ -62,6 +64,8 @@ export default class DespesasController {
     try {
       const id = Number(req.params.id);
       const { descricao, valor, data } = req.body;
+      let { categoria } = req.body;
+      if (!categoria) categoria = "Outros";
 
       const despesa = await isFromSameMonth(req, Despesas);
 
@@ -69,7 +73,7 @@ export default class DespesasController {
 
       await Despesas.findOneAndUpdate(
         { idDespesa: id },
-        { descricao, valor, data }
+        { descricao, valor, data, categoria }
       );
 
       return resDefaultMessage(res, 200, "updated");

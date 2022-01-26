@@ -33,20 +33,16 @@ export default class ReceitasController {
 
   async getReceitas(req: Request, res: Response) {
     try {
-      const queryParams = req.query;
-      if (queryParams) {
-        const receita = await Receitas.find({
-          descricao: queryParams.descricao,
-        }).select("-__v -_id -idReceita");
+      const { descricao } = req.query;
+      const regexParam = new RegExp(`^${descricao}$`);
+      const filter = descricao ? { descricao: regexParam, $options: "i" } : {};
 
-        if (!receita.length) return resDefaultMessage(res, 404, "notFound");
+      const receitas = await Receitas.find(filter).select(
+        "-__v -_id -idReceita"
+      );
 
-        return res.status(200).json(receita);
-      }
-
-      const receitas = await Receitas.find().select("-__v -_id -idReceita");
-
-      if (!receitas) return resDefaultMessage(res, 404, "notFound");
+      if (!receitas || !receitas.length)
+        return resDefaultMessage(res, 404, "notFound");
 
       return res.status(200).json(receitas);
     } catch (error) {

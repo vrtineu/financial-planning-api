@@ -33,6 +33,17 @@ export default class ReceitasController {
 
   async getReceitas(req: Request, res: Response) {
     try {
+      const queryParams = req.query;
+      if (queryParams) {
+        const receita = await Receitas.find({
+          descricao: queryParams.descricao,
+        }).select("-__v -_id -idReceita");
+
+        if (!receita.length) return resDefaultMessage(res, 404, "notFound");
+
+        return res.status(200).json(receita);
+      }
+
       const receitas = await Receitas.find().select("-__v -_id -idReceita");
 
       if (!receitas) return resDefaultMessage(res, 404, "notFound");

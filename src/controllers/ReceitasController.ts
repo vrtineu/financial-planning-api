@@ -34,14 +34,14 @@ export default class ReceitasController {
   async getReceitas(req: Request, res: Response) {
     try {
       const { descricao } = req.query;
-      const regexParam = new RegExp(`^${descricao}$`);
-      const filter = descricao ? { descricao: regexParam, $options: "i" } : {};
+      const regexParam = new RegExp(`^${descricao}$`, "i");
+      const filter = descricao ? { descricao: regexParam } : {};
 
       const receitas = await Receitas.find(filter).select(
         "-__v -_id -idReceita"
       );
 
-      if (!receitas || !receitas.length)
+      if (!receitas || !receitas.length || descricao === "")
         return resDefaultMessage(res, 404, "notFound");
 
       return res.status(200).json(receitas);

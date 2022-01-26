@@ -35,9 +35,16 @@ export default class DespesasController {
 
   async getDespesas(req: Request, res: Response) {
     try {
-      const despesas = await Despesas.find().select("-__v -_id -idDespesa");
+      const { descricao } = req.query;
+      const regexParam = new RegExp(`^${descricao}$`, "i");
+      const filter = descricao ? { descricao: regexParam } : {};
 
-      if (!despesas) return resDefaultMessage(res, 404, "notFound");
+      const despesas = await Despesas.find(filter).select(
+        "-__v -_id -idDespesa"
+      );
+
+      if (!despesas || !despesas.length || descricao === "")
+        return resDefaultMessage(res, 404, "notFound");
 
       return res.status(200).json(despesas);
     } catch (error) {

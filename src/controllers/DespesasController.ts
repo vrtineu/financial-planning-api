@@ -102,4 +102,27 @@ export default class DespesasController {
       return resError(res, error);
     }
   }
+
+  async getDespesasByYearAndMonth(req: Request, res: Response) {
+    try {
+      const { year, month } = req.params;
+      const filter = {
+        data: {
+          $gte: new Date(`${year}-${month}-01`),
+          $lte: new Date(`${year}-${month}-31`),
+        },
+      };
+
+      const despesas = await Despesas.find(filter).select(
+        "-__v -_id -idDespesa"
+      );
+
+      if (!despesas || !despesas.length)
+        return resDefaultMessage(res, 404, "notFound");
+
+      return res.status(200).json(despesas);
+    } catch (error) {
+      return resError(res, error);
+    }
+  }
 }

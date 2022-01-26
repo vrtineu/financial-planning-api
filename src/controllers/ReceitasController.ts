@@ -98,4 +98,27 @@ export default class ReceitasController {
       return resError(res, error);
     }
   }
+
+  async getReceitasByYearAndMonth(req: Request, res: Response) {
+    try {
+      const { year, month } = req.params;
+      const filter = {
+        data: {
+          $gte: new Date(`${year}-${month}-01`),
+          $lte: new Date(`${year}-${month}-31`),
+        },
+      };
+
+      const receitas = await Receitas.find(filter).select(
+        "-__v -_id -idReceita"
+      );
+
+      if (!receitas || !receitas.length)
+        return resDefaultMessage(res, 404, "notFound");
+
+      return res.status(200).json(receitas);
+    } catch (error) {
+      return resError(res, error);
+    }
+  }
 }

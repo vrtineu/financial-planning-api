@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { connect } from "../database";
-import { resError } from "../utils/responseStatusCode";
+import { resDefaultMessage, resError } from "../utils/responseStatusCode";
 import Receitas from "../models/Receitas";
 import Despesas from "../models/Despesas";
 
@@ -20,41 +20,59 @@ export default class ResumoController {
         },
       };
 
-      const valuesOfReceitas = await Receitas.find(filterDate).select(
-        "valor -_id"
-      );
+      const totalDespesas = await Despesas.aggregate([
+        { $match: filterDate },
+        { $group: { _id: null, total: { $sum: "$valor" } } },
+      ]);
 
-      const valuesOfDespesas = await Despesas.find(filterDate).select(
-        "valor categoria -_id"
-      );
+      const totalReceitas = await Receitas.aggregate([
+        { $match: filterDate },
+        { $group: { _id: null, total: { $sum: "$valor" } } },
+      ]);
 
-      const valuesOfDespesasByCategory = valuesOfDespesas.reduce(
-        (acc, curr) => {
-          const { categoria, valor } = curr;
+      const valuesOfDespesasByCategory = await Despesas.find(filterDate)
+        .select("valor categoria -_id")
+        .then((data) => {
+          return data.reduce((acc, cur) => {
+            const { categoria, valor } = cur;
+            acc[categoria]
+              ? (acc[categoria] += valor)
+              : (acc[categoria] = valor);
+            return acc;
+          }, {} as { [key: string]: number });
+        });
 
-          acc[categoria] ? (acc[categoria] += valor) : (acc[categoria] = valor);
-
-          return acc;
-        },
-        {} as { [key: string]: number }
-      );
-
-      const totalReceitas = valuesOfReceitas.reduce((acc, cur) => {
-        return acc + cur.valor;
-      }, 0);
-
-      const totalDespesas = valuesOfDespesas.reduce((acc, cur) => {
-        return acc + cur.valor;
-      }, 0);
+      if (!totalReceitas.length || !totalDespesas.length) {
+        if (!totalReceitas.length && !totalDespesas.length)
+          return resDefaultMessage(res, 404, "notFound");
+        else if (!totalReceitas.length)
+          return res.status(206).json({
+            message: '"Receitas" not found',
+            data: {
+              "total-receitas": [],
+              "total-despesas": totalDespesas,
+            },
+            "despesas-by-category": valuesOfDespesasByCategory,
+          });
+        else
+          return res.status(206).json({
+            message: '"Despesas" not found',
+            data: {
+              "total-receitas": totalReceitas,
+              "total-despesas": [],
+            },
+            "despesas-by-category": valuesOfDespesasByCategory,
+          });
+      }
 
       return res.status(200).json({
         message: "Resumo das despesas e receitas",
         data: {
-          "total receitas": totalReceitas,
-          "total despesas": totalDespesas,
-          saldo: totalReceitas - totalDespesas,
+          "total-receitas": totalReceitas[0].total,
+          "total-despesas": totalDespesas[0].total,
+          saldo: totalReceitas[0].total - totalDespesas[0].total,
         },
-        "despesas por categoria": valuesOfDespesasByCategory,
+        "despesas-by-category": valuesOfDespesasByCategory,
       });
     } catch (error) {
       return resError(res, error);

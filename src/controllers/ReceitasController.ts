@@ -70,6 +70,9 @@ export default class ReceitasController {
       const id = Number(req.params.id);
       const { descricao, valor, data } = req.body;
 
+      const idExists = await Receitas.findOne({ idReceita: id });
+      if (!idExists) return resDefaultMessage(res, 404, "notFound");
+
       const receita = await isFromSameMonth(req, Receitas);
 
       if (receita) return resDefaultMessage(res, 400, "registered");
@@ -88,10 +91,7 @@ export default class ReceitasController {
   async deleteReceita(req: Request, res: Response) {
     try {
       const id = Number(req.params.id);
-      console.log(`✨ ~ id`, id)
-
       const receita = await Receitas.findOneAndDelete({ idReceita: id });
-      console.log(`✨ ~ receita`, receita)
 
       if (!receita) return resDefaultMessage(res, 404, "notFound");
 

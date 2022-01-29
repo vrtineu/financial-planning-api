@@ -50,7 +50,7 @@ export default class ResumoController {
             message: '"Receitas" not found',
             data: {
               "total-receitas": [],
-              "total-despesas": totalDespesas,
+              "total-despesas": totalDespesas[0].total,
             },
             "despesas-by-category": valuesOfDespesasByCategory,
           });
@@ -58,10 +58,10 @@ export default class ResumoController {
           return res.status(206).json({
             message: '"Despesas" not found',
             data: {
-              "total-receitas": totalReceitas,
+              "total-receitas": totalReceitas[0].total,
               "total-despesas": [],
             },
-            "despesas-by-category": valuesOfDespesasByCategory,
+            "despesas-by-category": [],
           });
       }
 

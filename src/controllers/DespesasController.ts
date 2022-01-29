@@ -74,6 +74,9 @@ export default class DespesasController {
       let { categoria } = req.body;
       if (!categoria) categoria = "Outros";
 
+      const idExists = await Despesas.findOne({ idDespesa: id });
+      if (!idExists) return resDefaultMessage(res, 404, "notFound");
+
       const despesa = await isFromSameMonth(req, Despesas);
 
       if (despesa) return resDefaultMessage(res, 400, "registered");

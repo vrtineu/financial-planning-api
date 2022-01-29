@@ -1,5 +1,13 @@
 import { Response } from "express";
 
+const defaultMessages: Record<string, string> = {
+  success: "Cadastrado com sucesso",
+  registered: "Já existe um cadastro com essa descrição neste mesmo mês",
+  notFound: "Não foi encontrado nenhum cadastro",
+  updated: "Atualizado com sucesso",
+  deleted: "Excluído com sucesso",
+};
+
 /**
  *  Default messages and status code to be used in the response
  * @param res: express response object
@@ -9,14 +17,6 @@ import { Response } from "express";
  */
 function resDefaultMessage(res: Response, statusCode: number, message: string) {
   if (!statusCode) statusCode = 200;
-
-  const defaultMessages: Record<string, string> = {
-    success: "Cadastrado com sucesso",
-    registered: "Já existe um cadastro com essa descrição neste mesmo mês",
-    notFound: "Não foi encontrado nenhum cadastro",
-    updated: "Atualizado com sucesso",
-    deleted: "Excluído com sucesso",
-  };
 
   let messageResponse: string = defaultMessages[message];
   if (!messageResponse) messageResponse = '"message" not found';
@@ -34,4 +34,4 @@ function resError(res: Response, error: string | object | unknown) {
   return res.status(400).json({ error: error });
 }
 
-export { resDefaultMessage, resError };
+export { defaultMessages, resDefaultMessage, resError };

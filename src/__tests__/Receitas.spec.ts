@@ -1,96 +1,139 @@
 import app from "..";
+import { dadosReceita, limparReceitas, criarReceita } from "./utils";
+import { defaultMessages } from "../utils/responseStatusCode";
 import request from "supertest";
 
 describe("Testes nos endpoints de receitas", () => {
-  it("Deve ser possível criar uma receita", async () => {
-    const response = await request(app).post("/api/receitas").send({
-      descricao: "Receita de teste",
-      valor: 100,
-      data: "2020-03-01",
+  beforeAll(async () => {
+    await limparReceitas();
+  });
+
+  describe("Testes de criação", () => {
+    it("Deve ser possível criar uma receita", async () => {
+      const response = await request(app)
+        .post("/api/receitas")
+        .send(dadosReceita);
+      expect(response.status).toBe(201);
+      expect(response.body).toEqual(defaultMessages.success);
+    });
+    it("Não deve ser possível criar outra receita com a mesma descrição no mesmo mês", async () => {
+      const response = await request(app)
+        .post("/api/receitas")
+        .send(dadosReceita);
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual(defaultMessages.registered);
+    });
+  });
+
+  describe("Testes de listagem", () => {
+    it("Deve ser possível listar todas as receitas", async () => {
+      const response = await request(app).get("/api/receitas");
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveLength(1);
     });
 
-    expect(response.status).toEqual(201);
-    expect(response.body).toEqual("Cadastrado com sucesso");
-  });
-
-  it("Não deve ser possível cadastrar duas receitas com a mesma descrição no mesmo mês", async () => {
-    const response = await request(app).post("/api/receitas").send({
-      descricao: "Receita de teste",
-      valor: 100,
-      data: "2020-03-01",
+    it("Deve ser possível listar uma receita específica", async () => {
+      const response = await request(app).get("/api/receitas/1");
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty("descricao", "Test");
+      expect(response.body).toHaveProperty("valor", 1000);
+      expect(response.body).toHaveProperty("data", expect.any(String));
     });
 
-    expect(response.status).toEqual(400);
-    expect(response.body).toEqual(
-      "Já existe um cadastro com essa descrição neste mesmo mês"
-    );
-  });
-
-  it("Deve retornar todas as receitas cadastradas", async () => {
-    const response = await request(app).get("/api/receitas");
-    expect(response.status).toBe(200);
-
-    const receitas = response.body;
-    expect(receitas[0]).toHaveProperty("valor");
-    expect(receitas[0]).toHaveProperty("data");
-    expect(receitas[0]).toHaveProperty("descricao");
-  });
-
-  it("Deve retornar uma receita específica", async () => {
-    const response = await request(app).get("/api/receitas/1");
-    const receita = response.body;
-
-    expect(response.status).toBe(200);
-    expect(receita).toHaveProperty("valor");
-    expect(receita).toHaveProperty("data");
-    expect(receita).toHaveProperty("descricao");
-  });
-
-  it("Deve ser possível atualizar uma receita", async () => {
-    const response = await request(app).put("/api/receitas/1").send({
-      descricao: "Receita update",
-      valor: 9000,
-      data: "2022-01-28",
+    it("Deve ser possivel listar as receitas pela descricao", async () => {
+      const response = await request(app).get("/api/receitas?descricao=Test");
+      expect(response.status).toBe(200);
+      expect(response.body[0]).toHaveProperty("descricao", "Test");
+      expect(response.body[0]).toHaveProperty("valor", 1000);
+      expect(response.body[0]).toHaveProperty("data", expect.any(String));
     });
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual("Atualizado com sucesso");
-  });
 
-  it("Deve retornar erro ao tentar atualizar uma receita inexistente", async () => {
-    const response = await request(app).put("/api/receitas/123").send({
-      descricao: "Receita update",
-      valor: 9000,
-      data: "2022-01-28",
+    it("Deve exibir mensagem se não existir receitas cadastradas", async () => {
+      await limparReceitas();
+      const response = await request(app).get("/api/receitas");
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual(defaultMessages.notFound);
     });
-    expect(response.status).toBe(404);
-    expect(response.body).toEqual("Não foi encontrado nenhum cadastro");
   });
 
-  it("Deve ser possível deletar uma receita", async () => {
-    const response = await request(app).delete("/api/receitas/4");
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual("Excluído com sucesso");
+  describe("Testes de atualização", () => {
+    it("Deve ser possível atualizar uma receita", async () => {
+      await limparReceitas();
+      await criarReceita(dadosReceita);
+      const response = await request(app)
+        .put("/api/receitas/1")
+        .send({ ...dadosReceita, descricao: "UPDATED" });
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(defaultMessages.updated);
+    });
+
+    it("Deve exibir mensagem se não existir receitas cadastradas", async () => {
+      await limparReceitas();
+      const response = await request(app).put("/api/receitas/1");
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual(defaultMessages.notFound);
+    });
+
+    it("Deve exibir mensagem se não existir receita com o id informado", async () => {
+      await limparReceitas();
+      await criarReceita(dadosReceita);
+      const response = await request(app).put("/api/receitas/123");
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual(defaultMessages.notFound);
+    });
+
+    it("Não deve ser possível atualizar uma receita se ja existe uma com a mesma descrição e mês", async () => {
+      await limparReceitas();
+      await criarReceita(dadosReceita);
+      await criarReceita({ ...dadosReceita, data: new Date("2022-02-01") });
+      const response = await request(app)
+        .put("/api/receitas/1")
+        .send({ ...dadosReceita, data: new Date("2022-02-01") });
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual(defaultMessages.registered);
+    });
   });
 
-  it("Deve retornar erro ao tentar deletar uma receita inexistente", async () => {
-    const response = await request(app).delete("/api/receitas/123");
-    expect(response.status).toBe(404);
-    expect(response.body).toEqual("Não foi encontrado nenhum cadastro");
+  describe("Testes de exclusão", () => {
+    it("Deve ser possível excluir uma receita existente", async () => {
+      await limparReceitas();
+      await criarReceita(dadosReceita);
+      const response = await request(app).delete("/api/receitas/1");
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(defaultMessages.deleted);
+    });
+
+    it("Deve exibir mensagem se não existir receitas cadastradas", async () => {
+      await limparReceitas();
+      const response = await request(app).delete("/api/receitas/1");
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual(defaultMessages.notFound);
+    });
+
+    it("Deve exibir mensagem se não existir receita com o id informado", async () => {
+      await limparReceitas();
+      await criarReceita(dadosReceita);
+      const response = await request(app).delete("/api/receitas/123");
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual(defaultMessages.notFound);
+    });
   });
 
-  it("Deve ser possível buscar receitas por ano e mês", async () => {
-    const response = await request(app).get("/api/receitas/2022/1");
-    expect(response.status).toBe(200);
+  describe("Teste listar receitas por ano e mês", () => {
+    it("Deve ser possível obter as receitas por ano e mês", async () => {
+      await limparReceitas();
+      await criarReceita(dadosReceita);
+      await criarReceita({ ...dadosReceita, data: new Date("2022-02-01") });
+      const response = await request(app).get("/api/receitas/2022/02");
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveLength(1);
+    });
 
-    const receitas = response.body;
-    expect(receitas[0]).toHaveProperty("valor");
-    expect(receitas[0]).toHaveProperty("data");
-    expect(receitas[0]).toHaveProperty("descricao");
-  });
-
-  it("Deve retornar erro ao tentar buscar receitas por ano e mês inexistente", async () => {
-    const response = await request(app).get("/api/receitas/2020/1");
-    expect(response.status).toBe(404);
-    expect(response.body).toEqual("Não foi encontrado nenhum cadastro");
+    it("Deve exibir mensagem se não existir receitas cadastradas", async () => {
+      await limparReceitas();
+      const response = await request(app).get("/api/receitas/2022/02");
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual(defaultMessages.notFound);
+    });
   });
 });

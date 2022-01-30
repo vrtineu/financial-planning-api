@@ -1,6 +1,6 @@
 import app from "../..";
 import Counters from "../../models/Counters";
-import { defaultMessages } from "../../utils/responseStatusCode";
+import { defaultMessages } from "../../utils";
 import Despesas from "../../models/Despesas";
 import Receitas from "../../models/Receitas";
 import request from "supertest";

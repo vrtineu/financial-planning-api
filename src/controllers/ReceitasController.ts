@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Receitas from "../models/Receitas";
 import { connect } from "../database";
-import { resDefaultMessage, resError } from "../utils/responseStatusCode";
+import { resDefaultMessage, resError } from "../utils";
 import { isFromSameMonth } from "../services";
 
 export default class ReceitasController {

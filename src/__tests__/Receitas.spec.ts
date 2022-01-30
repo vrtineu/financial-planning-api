@@ -1,6 +1,6 @@
 import app from "..";
 import { dadosReceita, limparReceitas, criarReceita } from "./utils";
-import { defaultMessages } from "../utils/responseStatusCode";
+import { defaultMessages } from "../utils";
 import request from "supertest";
 
 describe("Testes nos endpoints de receitas", () => {

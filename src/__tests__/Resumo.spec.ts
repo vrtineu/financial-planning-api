@@ -1,6 +1,6 @@
 import app from "..";
 import request from "supertest";
-import { defaultMessages } from "../utils/responseStatusCode";
+import { defaultMessages } from "../utils";
 import {
   limparDespesas,
   limparReceitas,

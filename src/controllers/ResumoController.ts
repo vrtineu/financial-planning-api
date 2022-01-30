@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { connect } from "../database";
-import { resDefaultMessage, resError } from "../utils/responseStatusCode";
+import { resDefaultMessage, resError } from "../utils";
 import Receitas from "../models/Receitas";
 import Despesas from "../models/Despesas";
 

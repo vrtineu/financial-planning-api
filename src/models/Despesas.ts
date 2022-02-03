@@ -35,6 +35,7 @@ const schema: Schema = new Schema<Despesa>({
   },
   valor: {
     type: Number,
+    min: [0, "Valor não pode ser negativo"],
     required: [true, "Valor é obrigatório"],
   },
   data: {

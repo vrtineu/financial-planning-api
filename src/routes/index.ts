@@ -2,10 +2,11 @@ import { Router } from "express";
 import receitasRouter from "./receitas";
 import despesasRouter from "./despesas";
 import resumoRouter from "./resumo";
-import userRouter from "./auth";
-import authMiddleware from "../middlewares";
+import userRouter from "./user";
+import { authMiddleware } from "../middlewares";
 
 const router: Router = Router();
+
 router.use(authMiddleware);
 
 router.use("/receitas", receitasRouter);

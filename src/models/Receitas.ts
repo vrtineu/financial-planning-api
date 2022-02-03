@@ -20,6 +20,7 @@ const schema: Schema = new Schema<Receita>({
   },
   valor: {
     type: Number,
+    min: [0, "Valor não pode ser negativo"],
     required: [true, "Valor é obrigatório"],
   },
   data: {

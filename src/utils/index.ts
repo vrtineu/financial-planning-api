@@ -6,6 +6,7 @@ const defaultMessages: Record<string, string> = {
   notFound: "Não foi encontrado nenhum cadastro",
   updated: "Atualizado com sucesso",
   deleted: "Excluído com sucesso",
+  missingFieldsLogin: "Email ou Senha não informados",
 };
 
 /**

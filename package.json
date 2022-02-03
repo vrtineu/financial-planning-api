@@ -5,6 +5,10 @@
   "repository": "https://github.com/vrtineu/challenge-backend-alura.git",
   "author": "Vinicius Tineu <vininro@gmail.com>",
   "license": "MIT",
+  "engines": {
+    "node": "16.13.1"
+  },
+  "engineStrict": true,
   "scripts": {
     "build": "tsc",
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",

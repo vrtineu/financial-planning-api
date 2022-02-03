@@ -7,10 +7,7 @@ const receitasController = new ReceitasController();
 receitasRouter.post("/", receitasController.createReceita);
 receitasRouter.get("/", receitasController.getReceitas);
 receitasRouter.get("/:id", receitasController.getReceita);
-receitasRouter.get(
-  "/:year/:month",
-  receitasController.getReceitasByYearAndMonth
-);
+receitasRouter.get("/:year/:month", receitasController.getReceitasByYearAndMonth);
 receitasRouter.put("/:id", receitasController.updateReceita);
 receitasRouter.delete("/:id", receitasController.deleteReceita);
 

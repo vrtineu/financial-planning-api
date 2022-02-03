@@ -7,10 +7,7 @@ const despesasController = new DespesasController();
 despesasRouter.post("/", despesasController.createDespesa);
 despesasRouter.get("/", despesasController.getDespesas);
 despesasRouter.get("/:id", despesasController.getDespesa);
-despesasRouter.get(
-  "/:year/:month",
-  despesasController.getDespesasByYearAndMonth
-);
+despesasRouter.get("/:year/:month", despesasController.getDespesasByYearAndMonth);
 despesasRouter.put("/:id", despesasController.updateDespesa);
 despesasRouter.delete("/:id", despesasController.deleteDespesa);
 

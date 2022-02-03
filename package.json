@@ -6,14 +6,16 @@
   "author": "Vinicius Tineu <vininro@gmail.com>",
   "license": "MIT",
   "engines": {
-    "node": "16.13.1"
+    "node": "16.13.1",
+    "yarn": "1.22.17"
   },
   "engineStrict": true,
   "scripts": {
     "build": "tsc",
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
     "start": "ts-node src/server.ts",
-    "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1 --coverage"
+    "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1 --coverage",
+    "postinstall": "yarn build && yarn dev"
   },
   "dependencies": {
     "body-parser": "^1.19.1",

@@ -20,16 +20,21 @@
     "express-validator": "^6.14.0",
     "glob": "^7.2.0",
     "joi": "^17.5.0",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.3.1",
     "mongoose": "^6.1.7",
-    "mongoose-sequence": "^5.3.1"
+    "mongoose-sequence": "^5.3.1",
+    "passport": "^0.5.2",
+    "passport-local-mongoose": "^6.1.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-typescript": "^7.16.7",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.4.0",
+    "@types/jsonwebtoken": "^8.5.8",
     "@types/mongoose-sequence": "^3.0.6",
+    "@types/passport-local-mongoose": "^6.1.0",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.10.0",

@@ -13,7 +13,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
-    "start": "ts-node src/server.ts",
+    "start": "node dist/src/server.js",
     "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1 --coverage",
     "postinstall": "yarn build"
   },

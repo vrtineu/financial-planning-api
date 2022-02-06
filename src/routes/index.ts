@@ -12,6 +12,6 @@ router.use(authMiddleware);
 router.use("/receitas", receitasRouter);
 router.use("/despesas", despesasRouter);
 router.use("/resumo", resumoRouter);
-router.use("/login", userRouter);
+router.use("/", userRouter);
 
 export default router;

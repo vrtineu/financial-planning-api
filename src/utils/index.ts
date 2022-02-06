@@ -7,6 +7,7 @@ const defaultMessages: Record<string, string> = {
   updated: "Atualizado com sucesso",
   deleted: "Excluído com sucesso",
   missingFieldsLogin: "Email ou Senha não informados",
+  emailExists: "Já existe um cadastro com esse email",
 };
 
 /**
@@ -22,7 +23,7 @@ function resDefaultMessage(res: Response, statusCode: number, message: string) {
   let messageResponse: string = defaultMessages[message];
   if (!messageResponse) messageResponse = '"message" not found';
 
-  return res.status(statusCode).json(messageResponse);
+  return res.status(statusCode).json({ message: messageResponse });
 }
 
 /**

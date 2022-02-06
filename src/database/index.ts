@@ -1,5 +1,6 @@
 import mongoose, { ConnectOptions } from "mongoose";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 function connect() {

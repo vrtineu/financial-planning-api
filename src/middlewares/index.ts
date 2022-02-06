@@ -9,7 +9,7 @@ export function authMiddleware(
   res: Response,
   next: NextFunction
 ) {
-  if (req.url === "/login") return next();
+  if (req.url === "/login" || req.url === "/register") return next();
 
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];

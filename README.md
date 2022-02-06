@@ -1,6 +1,6 @@
 <h1 align="center">Financial Planning API</h1>
 
-## Contexto
+### Contexto
 
 API padrão REST desenvolvida para o challenge back-end 2 da Alura, com o objetivo de criar um serviço de controle financeiro, com as principais funcionalidades sendo o cadastro de receitas e despesas do usuário, com possibilidade de consulta, atualização e exclusão dos mesmos.
 

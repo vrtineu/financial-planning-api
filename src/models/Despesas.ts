@@ -1,4 +1,5 @@
 import mongoose, { Model, model, Schema } from "mongoose";
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const autoIncrement = require("mongoose-sequence")(mongoose);
 
@@ -17,16 +18,7 @@ const schema: Schema = new Schema<Despesa>({
   },
   categoria: {
     type: String,
-    enum: [
-      "Alimentação",
-      "Saúde",
-      "Moradia",
-      "Transporte",
-      "Educação",
-      "Lazer",
-      "Imprevistos",
-      "Outros",
-    ],
+    enum: ["Alimentação", "Saúde", "Moradia", "Transporte", "Educação", "Lazer", "Imprevistos", "Outros"],
     default: "Outros",
   },
   descricao: {

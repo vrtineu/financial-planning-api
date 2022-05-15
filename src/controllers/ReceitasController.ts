@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-import Receitas from "../models/Receitas";
+
 import { connect } from "../database";
-import { resDefaultMessage, resError } from "../utils";
+import Receitas from "../models/Receitas";
 import { isFromSameMonth } from "../services";
+import { resDefaultMessage, resError } from "../utils";
 
 export default class ReceitasController {
   constructor() {
@@ -20,8 +21,7 @@ export default class ReceitasController {
 
       const receitaAlreadyExists = await isFromSameMonth(req, Receitas);
 
-      if (receitaAlreadyExists)
-        return resDefaultMessage(res, 400, "registered");
+      if (receitaAlreadyExists) return resDefaultMessage(res, 400, "registered");
 
       await receita.save();
 
@@ -37,12 +37,9 @@ export default class ReceitasController {
       const regexParam = new RegExp(`^${descricao}$`, "i");
       const filter = descricao ? { descricao: regexParam } : {};
 
-      const receitas = await Receitas.find(filter).select(
-        "-__v -_id -idReceita"
-      );
+      const receitas = await Receitas.find(filter).select("-__v -_id -idReceita");
 
-      if (!receitas || !receitas.length || descricao === "")
-        return resDefaultMessage(res, 404, "notFound");
+      if (!receitas || !receitas.length || descricao === "") return resDefaultMessage(res, 404, "notFound");
 
       return res.status(200).json(receitas);
     } catch (error) {
@@ -53,9 +50,7 @@ export default class ReceitasController {
   async getReceita(req: Request, res: Response) {
     try {
       const id = Number(req.params.id);
-      const receita = await Receitas.findOne({ idReceita: id }).select(
-        "-__v -_id -idReceita"
-      );
+      const receita = await Receitas.findOne({ idReceita: id }).select("-__v -_id -idReceita");
 
       if (!receita) return resDefaultMessage(res, 404, "notFound");
 
@@ -77,10 +72,7 @@ export default class ReceitasController {
 
       if (receita) return resDefaultMessage(res, 400, "registered");
 
-      await Receitas.findOneAndUpdate(
-        { idReceita: id },
-        { descricao, valor, data }
-      );
+      await Receitas.findOneAndUpdate({ idReceita: id }, { descricao, valor, data });
 
       return resDefaultMessage(res, 200, "updated");
     } catch (error) {
@@ -111,12 +103,9 @@ export default class ReceitasController {
         },
       };
 
-      const receitas = await Receitas.find(filter).select(
-        "-__v -_id -idReceita"
-      );
+      const receitas = await Receitas.find(filter).select("-__v -_id -idReceita");
 
-      if (!receitas || !receitas.length)
-        return resDefaultMessage(res, 404, "notFound");
+      if (!receitas || !receitas.length) return resDefaultMessage(res, 404, "notFound");
 
       return res.status(200).json(receitas);
     } catch (error) {

@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-import Despesas from "../models/Despesas";
+
 import { connect } from "../database";
-import { resDefaultMessage, resError } from "../utils";
+import Despesas from "../models/Despesas";
 import { isFromSameMonth } from "../services";
+import { resDefaultMessage, resError } from "../utils";
 
 export default class DespesasController {
   constructor() {
@@ -22,8 +23,7 @@ export default class DespesasController {
 
       const despesaAlreadyExists = await isFromSameMonth(req, Despesas);
 
-      if (despesaAlreadyExists)
-        return resDefaultMessage(res, 400, "registered");
+      if (despesaAlreadyExists) return resDefaultMessage(res, 400, "registered");
 
       await despesa.save();
 
@@ -39,12 +39,9 @@ export default class DespesasController {
       const regexParam = new RegExp(`^${descricao}$`, "i");
       const filter = descricao ? { descricao: regexParam } : {};
 
-      const despesas = await Despesas.find(filter).select(
-        "-__v -_id -idDespesa"
-      );
+      const despesas = await Despesas.find(filter).select("-__v -_id -idDespesa");
 
-      if (!despesas || !despesas.length || descricao === "")
-        return resDefaultMessage(res, 404, "notFound");
+      if (!despesas || !despesas.length || descricao === "") return resDefaultMessage(res, 404, "notFound");
 
       return res.status(200).json(despesas);
     } catch (error) {
@@ -55,9 +52,7 @@ export default class DespesasController {
   async getDespesa(req: Request, res: Response) {
     try {
       const id = Number(req.params.id);
-      const despesa = await Despesas.findOne({ idDespesa: id }).select(
-        "-__v -_id -idDespesa"
-      );
+      const despesa = await Despesas.findOne({ idDespesa: id }).select("-__v -_id -idDespesa");
 
       if (!despesa) return resDefaultMessage(res, 404, "notFound");
 
@@ -81,10 +76,7 @@ export default class DespesasController {
 
       if (despesa) return resDefaultMessage(res, 400, "registered");
 
-      await Despesas.findOneAndUpdate(
-        { idDespesa: id },
-        { descricao, valor, data, categoria }
-      );
+      await Despesas.findOneAndUpdate({ idDespesa: id }, { descricao, valor, data, categoria });
 
       return resDefaultMessage(res, 200, "updated");
     } catch (error) {
@@ -116,12 +108,9 @@ export default class DespesasController {
         },
       };
 
-      const despesas = await Despesas.find(filter).select(
-        "-__v -_id -idDespesa"
-      );
+      const despesas = await Despesas.find(filter).select("-__v -_id -idDespesa");
 
-      if (!despesas || !despesas.length)
-        return resDefaultMessage(res, 404, "notFound");
+      if (!despesas || !despesas.length) return resDefaultMessage(res, 404, "notFound");
 
       return res.status(200).json(despesas);
     } catch (error) {

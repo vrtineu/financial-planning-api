@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { check } from "express-validator";
+
 import DespesasController from "../controllers/DespesasController";
 import { validate, bodyFields } from "../middlewares/validation";
 
@@ -15,10 +16,7 @@ despesasRouter.post(
 
 despesasRouter.get("/", despesasController.getDespesas);
 despesasRouter.get("/:id", despesasController.getDespesa);
-despesasRouter.get(
-  "/:year/:month",
-  despesasController.getDespesasByYearAndMonth
-);
+despesasRouter.get("/:year/:month", despesasController.getDespesasByYearAndMonth);
 
 despesasRouter.put(
   "/:id",

@@ -1,9 +1,10 @@
-import jwt from "jsonwebtoken";
-import { Request, Response } from "express";
-import { connect } from "../database";
-import { resDefaultMessage, resError } from "../utils";
-import User from "../models/User";
 import dotenv from "dotenv";
+import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
+
+import { connect } from "../database";
+import User from "../models/User";
+import { resDefaultMessage, resError } from "../utils";
 
 dotenv.config();
 
@@ -18,21 +19,19 @@ export default class UserController {
 
     try {
       const { email, password } = req.body;
-      if (!email || !password)
-        return resDefaultMessage(res, 400, "missingFieldsLogin");
+      if (!email || !password) return resDefaultMessage(res, 400, "missingFieldsLogin");
 
       const user = await User.findOne({ email });
       if (!user) return resDefaultMessage(res, 400, "notFound");
 
-      if (user.password !== password)
-        return resDefaultMessage(res, 400, "missingFieldsLogin");
+      if (user.password !== password) return resDefaultMessage(res, 400, "missingFieldsLogin");
 
       const token = jwt.sign({ id: user.id }, key, {
         expiresIn: "1h",
       });
 
       return res.status(200).json({
-        token: token,
+        token,
         user: {
           id: user._id,
           name: user.name,

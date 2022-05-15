@@ -1,9 +1,10 @@
 import { Router } from "express";
-import receitasRouter from "./receitas";
+
+import { authMiddleware } from "../middlewares";
 import despesasRouter from "./despesas";
+import receitasRouter from "./receitas";
 import resumoRouter from "./resumo";
 import userRouter from "./user";
-import { authMiddleware } from "../middlewares";
 
 const router: Router = Router();
 

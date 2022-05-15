@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { check } from "express-validator";
+
 import UserController from "../controllers/UserController";
 import { validate } from "../middlewares/validation";
 
@@ -10,10 +11,7 @@ userRouter.post(
   "/login",
   [
     check("email", "Email must be a valid email").isEmail(),
-    check(
-      "password",
-      "Password must be string and length is greater than 6 characters"
-    )
+    check("password", "Password must be string and length is greater than 6 characters")
       .isLength({ min: 6 })
       .isString(),
   ],

@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import ResumoController from "../controllers/ResumoController";
 
 const resumoRouter = Router();

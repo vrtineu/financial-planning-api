@@ -1,12 +1,10 @@
 import { Request } from "express";
 import { FilterQuery, Model } from "mongoose";
-import { Receita } from "../models/Receitas";
-import { Despesa } from "../models/Despesas";
 
-export async function isFromSameMonth(
-  req: Request,
-  model: Model<Receita> | Model<Despesa>
-) {
+import { Despesa } from "../models/Despesas";
+import { Receita } from "../models/Receitas";
+
+export async function isFromSameMonth(req: Request, model: Model<Receita> | Model<Despesa>) {
   const id = req.params?.id;
   const { descricao, data } = req.body;
 

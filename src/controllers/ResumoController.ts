@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
+
 import { connect } from "../database";
-import { resDefaultMessage, resError } from "../utils";
-import Receitas from "../models/Receitas";
 import Despesas from "../models/Despesas";
+import Receitas from "../models/Receitas";
+import { resDefaultMessage, resError } from "../utils";
 
 export default class ResumoController {
   constructor() {
@@ -35,17 +36,14 @@ export default class ResumoController {
         .then((data) => {
           return data.reduce((acc, cur) => {
             const { categoria, valor } = cur;
-            acc[categoria]
-              ? (acc[categoria] += valor)
-              : (acc[categoria] = valor);
+            acc[categoria] ? (acc[categoria] += valor) : (acc[categoria] = valor);
             return acc;
           }, {} as { [key: string]: number });
         });
 
       if (!totalReceitas.length || !totalDespesas.length) {
-        if (!totalReceitas.length && !totalDespesas.length)
-          return resDefaultMessage(res, 404, "notFound");
-        else if (!totalReceitas.length)
+        if (!totalReceitas.length && !totalDespesas.length) return resDefaultMessage(res, 404, "notFound");
+        if (!totalReceitas.length)
           return res.status(206).json({
             message: '"Receitas" not found',
             data: {
@@ -54,15 +52,14 @@ export default class ResumoController {
             },
             "despesas-by-category": valuesOfDespesasByCategory,
           });
-        else
-          return res.status(206).json({
-            message: '"Despesas" not found',
-            data: {
-              "total-receitas": totalReceitas[0].total,
-              "total-despesas": [],
-            },
-            "despesas-by-category": [],
-          });
+        return res.status(206).json({
+          message: '"Despesas" not found',
+          data: {
+            "total-receitas": totalReceitas[0].total,
+            "total-despesas": [],
+          },
+          "despesas-by-category": [],
+        });
       }
 
       return res.status(200).json({

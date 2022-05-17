@@ -1,27 +1,27 @@
 import { Router } from 'express';
 
-import IncomesController from '../controllers/IncomesController';
-import { validate, bodyFields } from '../middlewares/validation';
+import { bodyFields, validate } from '@middlewares/validation';
+import { CreateIncomeController } from '@modules/Income/useCases/createIncome/CreateIncomeController';
+import { DeleteIncomeController } from '@modules/Income/useCases/deleteIncome/DeleteIncomeController';
+import { GetIncomeController } from '@modules/Income/useCases/getIncome/GetIncomeController';
+import { GetIncomesController } from '@modules/Income/useCases/getIncomes/GetIncomesController';
+import { GetIncomesByDateController } from '@modules/Income/useCases/getIncomesByDate/GetIncomesByDateController';
+import { UpdateIncomeController } from '@modules/Income/useCases/updateIncome/UpdateIncomeController';
 
 const incomesRoutes = Router();
-const receitasController = new IncomesController();
 
-incomesRoutes.post('/', bodyFields, validate, receitasController.createReceita);
+const createIncomeController = new CreateIncomeController();
+const getIncomeController = new GetIncomeController();
+const getIncomesController = new GetIncomesController();
+const getIncomesByDateController = new GetIncomesByDateController();
+const updateIncomeController = new UpdateIncomeController();
+const deleteIncomeController = new DeleteIncomeController();
 
-incomesRoutes.get('/', receitasController.getReceitas);
-incomesRoutes.get('/:id', receitasController.getReceita);
-incomesRoutes.get(
-  '/:year/:month',
-  receitasController.getReceitasByYearAndMonth
-);
-
-incomesRoutes.put(
-  '/:id',
-  bodyFields,
-  validate,
-  receitasController.updateReceita
-);
-
-incomesRoutes.delete('/:id', receitasController.deleteReceita);
+incomesRoutes.post('/', bodyFields, validate, createIncomeController.handle);
+incomesRoutes.get('/', getIncomesController.handle);
+incomesRoutes.get('/:id', getIncomeController.handle);
+incomesRoutes.get('/:year/:month', getIncomesByDateController.handle);
+incomesRoutes.put('/:id', bodyFields, validate, updateIncomeController.handle);
+incomesRoutes.delete('/:id', deleteIncomeController.handle);
 
 export { incomesRoutes };

@@ -1,33 +1,45 @@
 import { Router } from 'express';
 import { check } from 'express-validator';
 
-import { ExpensesController } from '../controllers/ExpensesController';
-import { validate, bodyFields } from '../middlewares/validation';
+import { bodyFields, validate } from '@middlewares/validation';
+import { CreateExpenseController } from '@modules/Expense/useCases/createExpense/CreateExpenseController';
+import { DeleteExpenseController } from '@modules/Expense/useCases/deleteExpense/DeleteExpenseController';
+import { GetExpenseController } from '@modules/Expense/useCases/getExpense/GetExpenseController';
+import { GetExpensesController } from '@modules/Expense/useCases/getExpenses/GetExpensesController';
+import { GetExpensesByDateController } from '@modules/Expense/useCases/getExpensesByDate/GetExpensesByDateController';
+import { UpdateExpenseController } from '@modules/Expense/useCases/updateExpense/UpdateExpenseController';
 
 const expensesRoutes = Router();
-const expensesController = new ExpensesController();
+
+const createExpenseController = new CreateExpenseController();
+const getExpenseController = new GetExpenseController();
+const getExpensesController = new GetExpensesController();
+const getExpensesByDateController = new GetExpensesByDateController();
+const updateExpenseController = new UpdateExpenseController();
+const deleteExpenseController = new DeleteExpenseController();
+
+expensesRoutes.get('/', getExpensesController.handle);
+expensesRoutes.get('/:id', getExpenseController.handle);
+expensesRoutes.get('/:year/:month', getExpensesByDateController.handle);
+expensesRoutes.delete('/:id', deleteExpenseController.handle);
+
+const categoryValidation = [
+  ...bodyFields,
+  check('category', 'category must be string').isString(),
+];
 
 expensesRoutes.post(
   '/',
-  [...bodyFields, check('categoria', 'Categoria must be string').isString()],
+  categoryValidation,
   validate,
-  expensesController.createDespesa
-);
-
-expensesRoutes.get('/', expensesController.getDespesas);
-expensesRoutes.get('/:id', expensesController.getDespesa);
-expensesRoutes.get(
-  '/:year/:month',
-  expensesController.getDespesasByYearAndMonth
+  createExpenseController.handle
 );
 
 expensesRoutes.put(
   '/:id',
-  [...bodyFields, check('categoria', 'Categoria must be string').isString()],
+  categoryValidation,
   validate,
-  expensesController.updateDespesa
+  updateExpenseController.handle
 );
-
-expensesRoutes.delete('/:id', expensesController.deleteDespesa);
 
 export { expensesRoutes };

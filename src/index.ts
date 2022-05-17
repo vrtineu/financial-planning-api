@@ -1,8 +1,11 @@
+import dotenv from 'dotenv';
 import express, { Request, Response, NextFunction } from 'express';
 
 import { connect } from '@database/index';
 import { AppError } from '@errors/AppError';
 import { router } from '@routes/index';
+
+dotenv.config();
 
 const app = express();
 

@@ -1,10 +1,11 @@
 import { Router } from 'express';
 
-import { SummaryController } from '../controllers/SummaryController';
+import { GetSummaryByDateController } from '@modules/Summary/useCases/getSummaryByDate/GetSummaryByDateController';
 
 const summaryRoutes = Router();
-const summaryController = new SummaryController();
 
-summaryRoutes.get('/:year/:month', summaryController.getResumoByYearAndMonth);
+const getSummaryByDateController = new GetSummaryByDateController();
+
+summaryRoutes.get('/:year/:month', getSummaryByDateController.handle);
 
 export { summaryRoutes };

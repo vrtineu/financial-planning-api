@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
-import { ensureAuthenticated } from '../middlewares/ensureAuthenticated';
+import { ensureAuthenticated } from '@middlewares/ensureAuthenticated';
+
 import { expensesRoutes } from './expenses.routes';
 import { incomesRoutes } from './incomes.routes';
 import { summaryRoutes } from './summary.routes';
@@ -10,9 +11,9 @@ const router = Router();
 
 router.use(ensureAuthenticated);
 
-router.use('/receitas', incomesRoutes);
-router.use('/despesas', expensesRoutes);
-router.use('/resumo', summaryRoutes);
-router.use('/', userRoutes);
+router.use('/incomes', incomesRoutes);
+router.use('/expenses', expensesRoutes);
+router.use('/summary', summaryRoutes);
+router.use('/user', userRoutes);
 
 export { router };

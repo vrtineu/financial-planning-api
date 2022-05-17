@@ -1,11 +1,14 @@
 import { Router } from 'express';
 import { check } from 'express-validator';
 
-import UserController from '../controllers/UserController';
-import { validate } from '../middlewares/validation';
+import { validate } from '@middlewares/validation';
+import { CreateSessionController } from '@modules/User/useCases/createSession/CreateSessionController';
+import { CreateUserController } from '@modules/User/useCases/createUser/CreateUserController';
 
 const userRoutes = Router();
-const userController = new UserController();
+
+const createSessionController = new CreateSessionController();
+const createUserController = new CreateUserController();
 
 userRoutes.post(
   '/login',
@@ -19,7 +22,7 @@ userRoutes.post(
       .isString(),
   ],
   validate,
-  userController.login
+  createSessionController.handle
 );
 
 userRoutes.post(
@@ -32,7 +35,7 @@ userRoutes.post(
     check('role').isString(),
   ],
   validate,
-  userController.register
+  createUserController.handle
 );
 
 export { userRoutes };

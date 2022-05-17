@@ -1,24 +1,22 @@
-import dotenv from "dotenv";
-import mongoose, { ConnectOptions } from "mongoose";
+import mongoose, { ConnectOptions } from 'mongoose';
 
-dotenv.config();
-
-function connect() {
+export function connect() {
   const db = process.env.MONGO_URI;
-  if (!db) throw new Error("Configurar .env");
+  if (!db) throw new Error('Configurar .env');
 
   const options = { useNewUrlParser: true, useUnifiedTopology: true };
+
   const connect = () => {
     mongoose.connect(db, options as ConnectOptions).catch((err) => {
       console.log(err);
-      return mongoose.connection.on("error", (err) => {
+
+      return mongoose.connection.on('error', (err) => {
         console.log(err);
         return connect();
       });
     });
   };
-  connect();
-  mongoose.connection.on("disconnected", connect);
-}
 
-export { connect };
+  connect();
+  mongoose.connection.on('disconnected', connect);
+}

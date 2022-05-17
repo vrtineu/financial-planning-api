@@ -1,18 +1,18 @@
-import { Router } from "express";
+import { Router } from 'express';
 
-import { authMiddleware } from "../middlewares";
-import despesasRouter from "./despesas";
-import receitasRouter from "./receitas";
-import resumoRouter from "./resumo";
-import userRouter from "./user";
+import { authMiddleware } from '../middlewares';
+import { expensesRoutes } from './expenses.routes';
+import { incomesRoutes } from './incomes.routes';
+import { summaryRoutes } from './summary.routes';
+import { userRoutes } from './users.routes';
 
-const router: Router = Router();
+const router = Router();
 
 router.use(authMiddleware);
 
-router.use("/receitas", receitasRouter);
-router.use("/despesas", despesasRouter);
-router.use("/resumo", resumoRouter);
-router.use("/", userRouter);
+router.use('/receitas', incomesRoutes);
+router.use('/despesas', expensesRoutes);
+router.use('/resumo', summaryRoutes);
+router.use('/', userRoutes);
 
-export default router;
+export { router };

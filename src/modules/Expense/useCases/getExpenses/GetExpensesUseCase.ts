@@ -1,6 +1,5 @@
-import { AppError } from 'errors/AppError';
-
-import { Expenses } from '../../model/Expenses';
+import { AppError } from '@errors/AppError';
+import { Expenses } from '@modules/Expense/model/Expenses';
 
 class GetExpensesUseCase {
   public async execute(description: string) {

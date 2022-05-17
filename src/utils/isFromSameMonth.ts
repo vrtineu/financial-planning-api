@@ -1,7 +1,7 @@
 import { FilterQuery, Model } from 'mongoose';
 
-import { IExpense } from '../modules/Expense/model/Expenses';
-import { IIncome } from '../modules/Income/model/Incomes';
+import { IExpense } from '@modules/Expense/model/Expenses';
+import { IIncome } from '@modules/Income/model/Incomes';
 
 interface IRequest {
   date: Date;

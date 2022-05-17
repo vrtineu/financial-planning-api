@@ -10,6 +10,29 @@
     "resolveJsonModule": true,
     "experimentalDecorators": true,
     "outDir": "./dist",
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "paths": {
+      "@modules/*": [
+        "modules/*"
+      ],
+      "@errors/*": [
+        "errors/*"
+      ],
+      "@utils/*": [
+        "utils/*"
+      ],
+      "@database/*": [
+        "database/*"
+      ],
+      "@middlewares/*": [
+        "middlewares/*"
+      ],
+      "@shared/*": [
+        "shared/*"
+      ],
+      "@routes/*": [
+        "routes/*"
+      ]
+    }
   }
 }

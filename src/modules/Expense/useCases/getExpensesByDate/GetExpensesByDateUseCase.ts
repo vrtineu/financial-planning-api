@@ -1,4 +1,4 @@
-import { Expenses } from '../../model/Expenses';
+import { Expenses } from '@modules/Expense/model/Expenses';
 
 class GetExpensesByDateUseCase {
   public async execute(year: number, month: number) {

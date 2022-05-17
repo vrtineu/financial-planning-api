@@ -1,6 +1,6 @@
-import { AppError } from 'errors/AppError';
-import { ICreateUserDTO } from 'modules/User/dtos/ICreateUserDTO';
-import User from 'modules/User/model/User';
+import { AppError } from '@errors/AppError';
+import { ICreateUserDTO } from '@modules/User/dtos/ICreateUserDTO';
+import User from '@modules/User/model/User';
 
 class CreateUserUseCase {
   public async execute({

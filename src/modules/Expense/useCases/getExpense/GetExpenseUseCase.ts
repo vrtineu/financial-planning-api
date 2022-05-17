@@ -1,4 +1,4 @@
-import { Expenses } from '../../model/Expenses';
+import { Expenses } from '@modules/Expense/model/Expenses';
 
 class GetExpenseUseCase {
   public async execute(id: number) {

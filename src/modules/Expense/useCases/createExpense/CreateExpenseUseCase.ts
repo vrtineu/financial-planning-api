@@ -1,8 +1,7 @@
-import { AppError } from 'errors/AppError';
-import { ICreateExpenseDTO } from 'modules/Expense/dtos/ICreateExpenseDTO';
-import { isFromSameMonth } from 'utils/isFromSameMonth';
-
-import { Expenses } from '../../model/Expenses';
+import { AppError } from '@errors/AppError';
+import { ICreateExpenseDTO } from '@modules/Expense/dtos/ICreateExpenseDTO';
+import { Expenses } from '@modules/Expense/model/Expenses';
+import { isFromSameMonth } from '@utils/isFromSameMonth';
 
 class CreateExpenseUseCase {
   public async execute({

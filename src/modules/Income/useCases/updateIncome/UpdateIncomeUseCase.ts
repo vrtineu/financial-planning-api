@@ -1,7 +1,7 @@
-import { AppError } from 'errors/AppError';
-import { IUpdateIncomeDTO } from 'modules/Income/dtos/IUpdateIncomeDTO';
-import { Incomes } from 'modules/Income/model/Incomes';
-import { isFromSameMonth } from 'utils/isFromSameMonth';
+import { AppError } from '@errors/AppError';
+import { IUpdateIncomeDTO } from '@modules/Income/dtos/IUpdateIncomeDTO';
+import { Incomes } from '@modules/Income/model/Incomes';
+import { isFromSameMonth } from '@utils/isFromSameMonth';
 
 class UpdateIncomeUseCase {
   public async execute({ date, description, id, value }: IUpdateIncomeDTO) {

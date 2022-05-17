@@ -1,9 +1,8 @@
-import { AppError } from 'errors/AppError';
 import express, { Request, Response, NextFunction } from 'express';
-import 'express-async-errors';
 
-import { connect } from './database';
-import { router } from './routes';
+import { connect } from '@database/index';
+import { AppError } from '@errors/AppError';
+import { router } from '@routes/index';
 
 const app = express();
 

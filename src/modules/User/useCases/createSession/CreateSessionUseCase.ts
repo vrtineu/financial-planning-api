@@ -1,6 +1,7 @@
-import { AppError } from 'errors/AppError';
 import { sign } from 'jsonwebtoken';
-import User from 'modules/User/model/User';
+
+import { AppError } from '@errors/AppError';
+import User from '@modules/User/model/User';
 
 class CreateSessionUseCase {
   public async execute(email: string, password: string) {

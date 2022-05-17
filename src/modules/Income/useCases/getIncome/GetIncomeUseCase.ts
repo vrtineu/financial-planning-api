@@ -1,5 +1,5 @@
-import { AppError } from 'errors/AppError';
-import { Incomes } from 'modules/Income/model/Incomes';
+import { AppError } from '@errors/AppError';
+import { Incomes } from '@modules/Income/model/Incomes';
 
 class GetIncomeUseCase {
   public async execute(id: number) {

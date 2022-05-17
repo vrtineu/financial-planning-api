@@ -1,5 +1,5 @@
-import { AppError } from 'errors/AppError';
-import { Incomes } from 'modules/Income/model/Incomes';
+import { AppError } from '@errors/AppError';
+import { Incomes } from '@modules/Income/model/Incomes';
 
 class DeleteIncomeUseCase {
   public async execute(id: number) {

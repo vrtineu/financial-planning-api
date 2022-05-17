@@ -1,6 +1,6 @@
-import { AppError } from 'errors/AppError';
-import { Expenses } from 'modules/Expense/model/Expenses';
-import { Incomes } from 'modules/Income/model/Incomes';
+import { AppError } from '@errors/AppError';
+import { Expenses } from '@modules/Expense/model/Expenses';
+import { Incomes } from '@modules/Income/model/Incomes';
 
 class GetSummaryByDateUseCase {
   public async execute(year: number, month: number) {

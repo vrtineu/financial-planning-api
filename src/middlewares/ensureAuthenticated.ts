@@ -12,7 +12,8 @@ export function ensureAuthenticated(
   res: Response,
   next: NextFunction
 ): Response | void {
-  if (req.url === '/login' || req.url === '/register') return next();
+  if (req.url === '/users/login' || req.url === '/users/register')
+    return next();
 
   const authHeader = req.headers.authorization;
 

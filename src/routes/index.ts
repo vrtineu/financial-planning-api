@@ -14,6 +14,6 @@ router.use(ensureAuthenticated);
 router.use('/incomes', incomesRoutes);
 router.use('/expenses', expensesRoutes);
 router.use('/summary', summaryRoutes);
-router.use('/user', userRoutes);
+router.use('/users', userRoutes);
 
 export { router };

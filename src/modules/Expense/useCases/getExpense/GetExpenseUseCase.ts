@@ -3,7 +3,7 @@ import { Expenses } from '@modules/Expense/model/Expenses';
 class GetExpenseUseCase {
   public async execute(id: number) {
     const expense = await Expenses.findOne({ expenseId: id }).select(
-      '-__v -_id -idDespesa'
+      '-__v -_id -expenseId'
     );
 
     if (!expense) throw new Error('Expense not found');

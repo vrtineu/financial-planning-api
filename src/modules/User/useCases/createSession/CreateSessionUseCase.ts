@@ -1,3 +1,4 @@
+import { compare } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 
 import { AppError } from '@errors/AppError';
@@ -9,10 +10,10 @@ class CreateSessionUseCase {
       throw new AppError('Email ou senha não preenchido');
 
     const user = await User.findOne({ email });
-    if (!user) throw new AppError('Usuário não encontrado', 404);
+    if (!user) throw new AppError('Email ou senha incorretos', 404);
 
-    if (user.password !== password)
-      throw new AppError('Email ou senha incorretos', 404);
+    const passwordMatched = await compare(password, user.password);
+    if (!passwordMatched) throw new AppError('Email ou senha incorretos', 404);
 
     const key = process.env.SECRET_KEY;
     if (!key) throw new Error('Configurar .env');

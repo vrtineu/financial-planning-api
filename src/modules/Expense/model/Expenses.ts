@@ -9,6 +9,7 @@ export interface IExpense {
   description: string;
   value: number;
   date: Date;
+  userId: Schema.Types.ObjectId;
 }
 
 const schema: Schema = new Schema<IExpense>({
@@ -42,6 +43,10 @@ const schema: Schema = new Schema<IExpense>({
   date: {
     type: Date,
     required: [true, 'Data é obrigatória'],
+  },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
   },
 });
 

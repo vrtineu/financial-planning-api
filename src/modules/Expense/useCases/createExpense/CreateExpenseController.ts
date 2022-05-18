@@ -6,6 +6,7 @@ class CreateExpenseController {
   public async handle(request: Request, response: Response) {
     const { id } = request.params;
     const { description, value, date, category } = request.body;
+    const { userId } = request.user;
 
     const createExpenseUseCase = new CreateExpenseUseCase();
 
@@ -14,7 +15,8 @@ class CreateExpenseController {
       value,
       date,
       category,
-      id,
+      id: Number(id),
+      userId,
     });
 
     return response.status(201).json(expense);

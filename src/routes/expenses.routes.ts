@@ -23,21 +23,21 @@ expensesRoutes.get('/:id', getExpenseController.handle);
 expensesRoutes.get('/:year/:month', getExpensesByDateController.handle);
 expensesRoutes.delete('/:id', deleteExpenseController.handle);
 
-const categoryValidation = [
+const bodyValidation = [
   ...bodyFields,
   check('category', 'category must be string').isString(),
 ];
 
 expensesRoutes.post(
   '/',
-  categoryValidation,
+  bodyValidation,
   validate,
   createExpenseController.handle
 );
 
 expensesRoutes.put(
   '/:id',
-  categoryValidation,
+  bodyValidation,
   validate,
   updateExpenseController.handle
 );

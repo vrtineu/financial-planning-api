@@ -10,9 +10,9 @@ function validate(req: Request, res: Response, next: NextFunction) {
 }
 
 const bodyFields: ValidationChain[] = [
-  check('descricao', 'Descrição must be string').isString(),
-  check('valor', 'Valor must be a float number').isFloat(),
-  check('data', 'Data must be string').isString(),
+  check('description', 'Descrição must be string').isString(),
+  check('value', 'Valor must be a float number').isFloat(),
+  check('date', 'Data must be string').isString(),
 ];
 
 export { validate, bodyFields };

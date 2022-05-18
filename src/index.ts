@@ -1,9 +1,8 @@
 import dotenv from 'dotenv';
 import express from 'express';
 
-import { connect } from '@database/index';
-import { errorHandler } from '@routes/error.routes';
-import { router } from '@routes/index';
+import { connect } from './database';
+import { router } from './routes';
 
 dotenv.config();
 
@@ -12,8 +11,6 @@ const app = express();
 connect();
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use('/api', router);
-app.use(errorHandler);
 
 export { app };

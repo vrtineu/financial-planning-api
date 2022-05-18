@@ -4,4 +4,5 @@ export interface ICreateExpenseDTO {
   date: Date;
   category: string;
   id: number;
+  userId: string;
 }

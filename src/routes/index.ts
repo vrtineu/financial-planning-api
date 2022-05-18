@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import { ensureAuthenticated } from '@middlewares/ensureAuthenticated';
 
+import { errorHandler } from './error.routes';
 import { expensesRoutes } from './expenses.routes';
 import { incomesRoutes } from './incomes.routes';
 import { summaryRoutes } from './summary.routes';
@@ -15,5 +16,7 @@ router.use('/incomes', incomesRoutes);
 router.use('/expenses', expensesRoutes);
 router.use('/summary', summaryRoutes);
 router.use('/users', userRoutes);
+
+router.use(errorHandler);
 
 export { router };

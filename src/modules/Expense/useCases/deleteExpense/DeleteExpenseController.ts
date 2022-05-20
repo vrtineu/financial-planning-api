@@ -4,13 +4,17 @@ import { DeleteExpenseUseCase } from './DeleteExpenseUseCase';
 
 class DeleteExpenseController {
   public async handle(request: Request, response: Response) {
-    const id = Number(request.params.id);
+    const { userId } = request.user;
+    const { expenseId } = request.params;
 
     const deleteExpenseUseCase = new DeleteExpenseUseCase();
 
-    const result = await deleteExpenseUseCase.execute(id);
+    const result = await deleteExpenseUseCase.execute(
+      Number(expenseId),
+      userId
+    );
 
-    return response.status(200).json(result);
+    return response.status(204).json(result);
   }
 }
 

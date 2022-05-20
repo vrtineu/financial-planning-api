@@ -47,6 +47,7 @@ const schema: Schema = new Schema<IExpense>({
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
+    required: [true, 'Usuário é obrigatório'],
   },
 });
 

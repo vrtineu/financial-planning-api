@@ -4,21 +4,21 @@ import { UpdateExpenseUseCase } from './UpdateExpenseUseCase';
 
 class UpdateExpenseController {
   public async handle(request: Request, response: Response) {
-    const id = Number(request.params.id);
+    const { id } = request.params;
 
     const { description, value, date, category = 'Outros' } = request.body;
 
     const updateExpenseUseCase = new UpdateExpenseUseCase();
 
     const result = await updateExpenseUseCase.execute({
-      id,
+      id: Number(id),
       description,
       value,
       date,
       category,
     });
 
-    return response.status(200).json(result);
+    return response.json(result);
   }
 }
 

@@ -6,7 +6,7 @@ import { IIncome } from '@modules/Income/model/Incomes';
 interface IRequest {
   date: Date;
   description: string;
-  id: number;
+  id?: number;
 }
 
 export async function isFromSameMonth(
@@ -22,7 +22,9 @@ export async function isFromSameMonth(
 
   const idType = Object.keys(model.schema.paths)[0];
 
-  if (id) filter[idType] = { $ne: id };
+  if (id) {
+    filter[idType] = { $ne: id };
+  }
 
   const findRequest = await (model as Model<IIncome | IExpense>).find(filter);
 

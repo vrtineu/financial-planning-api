@@ -1,12 +1,13 @@
-import { Expenses } from '@modules/Expense/model/Expenses';
+import { AppError } from '@errors/AppError';
+import { Expenses, IExpense } from '@modules/Expense/model/Expenses';
 
 class GetExpenseUseCase {
-  public async execute(id: number) {
-    const expense = await Expenses.findOne({ expenseId: id }).select(
+  public async execute(expenseId: number, userId: string): Promise<IExpense> {
+    const expense = await Expenses.findOne({ expenseId, userId }).select(
       '-__v -_id -expenseId'
     );
 
-    if (!expense) throw new Error('Expense not found');
+    if (!expense) throw new AppError('Nenhuma despesa encontrada', 404);
 
     return expense;
   }

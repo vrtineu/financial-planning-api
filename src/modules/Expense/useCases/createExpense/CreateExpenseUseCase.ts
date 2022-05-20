@@ -9,7 +9,6 @@ class CreateExpenseUseCase {
     date,
     description,
     value,
-    id,
     userId,
   }: ICreateExpenseDTO) {
     const expense = new Expenses({
@@ -21,7 +20,7 @@ class CreateExpenseUseCase {
     });
 
     const expenseAlreadyExists = await isFromSameMonth(
-      { date, description, id },
+      { date, description },
       Expenses
     );
 

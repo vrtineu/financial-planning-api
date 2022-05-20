@@ -19,9 +19,9 @@ const updateExpenseController = new UpdateExpenseController();
 const deleteExpenseController = new DeleteExpenseController();
 
 expensesRoutes.get('/', getExpensesController.handle);
-expensesRoutes.get('/:id', getExpenseController.handle);
+expensesRoutes.get('/:expenseId', getExpenseController.handle);
 expensesRoutes.get('/:year/:month', getExpensesByDateController.handle);
-expensesRoutes.delete('/:id', deleteExpenseController.handle);
+expensesRoutes.delete('/:expenseId', deleteExpenseController.handle);
 
 const bodyValidation = [
   ...bodyFields,

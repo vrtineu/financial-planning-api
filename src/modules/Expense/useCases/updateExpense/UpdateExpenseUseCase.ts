@@ -15,7 +15,7 @@ class UpdateExpenseUseCase {
     if (!idExists) throw new AppError('Expense not found', 404);
 
     const expense = await isFromSameMonth({ date, description, id }, Expenses);
-    if (expense) throw new AppError('Expense already exists', 400);
+    if (expense) throw new AppError('Despesa já registrada para este mês.');
 
     await Expenses.findOneAndUpdate(
       { expenseId: id },

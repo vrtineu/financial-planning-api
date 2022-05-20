@@ -3,8 +3,7 @@ import { Request, Response } from 'express';
 import { CreateExpenseUseCase } from './CreateExpenseUseCase';
 
 class CreateExpenseController {
-  public async handle(request: Request, response: Response) {
-    const { id } = request.params;
+  public async handle(request: Request, response: Response): Promise<Response> {
     const { description, value, date, category } = request.body;
     const { userId } = request.user;
 
@@ -15,7 +14,6 @@ class CreateExpenseController {
       value,
       date,
       category,
-      id: Number(id),
       userId,
     });
 

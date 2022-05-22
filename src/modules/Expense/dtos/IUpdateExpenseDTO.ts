@@ -4,4 +4,5 @@ export interface IUpdateExpenseDTO {
   description: string;
   value: number;
   category: string;
+  userId: string;
 }

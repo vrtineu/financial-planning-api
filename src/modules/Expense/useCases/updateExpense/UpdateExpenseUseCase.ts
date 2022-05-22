@@ -10,15 +10,16 @@ class UpdateExpenseUseCase {
     description,
     value,
     category,
+    userId,
   }: IUpdateExpenseDTO) {
-    const idExists = await Expenses.findOne({ expenseId: id });
+    const idExists = await Expenses.findOne({ expenseId: id, userId });
     if (!idExists) throw new AppError('Expense not found', 404);
 
     const expense = await isFromSameMonth({ date, description, id }, Expenses);
     if (expense) throw new AppError('Despesa já registrada para este mês.');
 
     await Expenses.findOneAndUpdate(
-      { expenseId: id },
+      { expenseId: id, userId },
       { description, value, date, category }
     );
 

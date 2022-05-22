@@ -1,22 +1,29 @@
+import { AppError } from '@errors/AppError';
 import { ICreateIncomeDTO } from '@modules/Income/dtos/ICreateIncomeDTO';
-import { Incomes } from '@modules/Income/model/Incomes';
+import { IIncome, Incomes } from '@modules/Income/model/Incomes';
 import { isFromSameMonth } from '@utils/isFromSameMonth';
 
 class CreateIncomeUseCase {
-  public async execute({ date, description, value, id }: ICreateIncomeDTO) {
+  public async execute({
+    date,
+    description,
+    value,
+    userId,
+  }: ICreateIncomeDTO): Promise<IIncome> {
     const income = new Incomes({
       description,
       value,
       date,
+      userId,
     });
 
     const incomeAlreadyExists = await isFromSameMonth(
-      { date, description, id },
+      { date, description },
       Incomes
     );
 
     if (incomeAlreadyExists)
-      throw new Error('Receita já cadastrada para o mesmo mês');
+      throw new AppError('Receita já cadastrada para o mesmo mês');
 
     await income.save();
 

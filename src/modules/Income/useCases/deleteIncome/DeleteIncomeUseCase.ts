@@ -2,8 +2,11 @@ import { AppError } from '@errors/AppError';
 import { Incomes } from '@modules/Income/model/Incomes';
 
 class DeleteIncomeUseCase {
-  public async execute(id: number) {
-    const income = await Incomes.findOneAndDelete({ incomeId: id });
+  public async execute(
+    id: number,
+    userId: string
+  ): Promise<{ message: string }> {
+    const income = await Incomes.findOneAndDelete({ incomeId: id, userId });
 
     if (!income) throw new AppError('Receita não encontrada', 404);
 

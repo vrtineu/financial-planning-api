@@ -1,11 +1,16 @@
 import { AppError } from '@errors/AppError';
-import { Incomes } from '@modules/Income/model/Incomes';
+import { IIncome, Incomes } from '@modules/Income/model/Incomes';
 
 class GetIncomesUseCase {
-  public async execute(description: string) {
+  public async execute(
+    description: string,
+    userId: string
+  ): Promise<IIncome[]> {
     const regexParam = new RegExp(`^${description}$`, 'i');
 
-    const filter = description ? { description: regexParam } : {};
+    const filter = description
+      ? { description: regexParam, userId }
+      : { userId };
 
     const incomes = await Incomes.find(filter).select('-__v -_id -incomeId');
 

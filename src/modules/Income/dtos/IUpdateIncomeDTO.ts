@@ -3,4 +3,5 @@ export interface IUpdateIncomeDTO {
   date: Date;
   description: string;
   value: number;
+  userId: string;
 }

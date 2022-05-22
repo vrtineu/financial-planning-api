@@ -8,6 +8,7 @@ export interface IIncome {
   description: string;
   value: number;
   date: Date;
+  userId: Schema.Types.ObjectId;
 }
 
 const schema: Schema = new Schema<IIncome>({
@@ -27,6 +28,11 @@ const schema: Schema = new Schema<IIncome>({
   date: {
     type: Date,
     required: [true, 'Data é obrigatória'],
+  },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: [true, 'Usuário é obrigatório'],
   },
 });
 
